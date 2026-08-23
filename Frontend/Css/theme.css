@@ -1,0 +1,154 @@
+:root {
+    --bg-primary: #0b1220;
+    --bg-secondary: #0f172a;
+    --bg-card: rgba(255, 255, 255, 0.04);
+    --bg: var(--bg-primary);
+    --sidebar: var(--bg-secondary);
+    --card: var(--bg-card);
+    --text: #f8fafc;
+    --text-primary: var(--text);
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --primary: #38bdf8;
+    --accent: var(--primary);
+    --input-bg: var(--bg-secondary);
+    --border: rgba(255, 255, 255, 0.08);
+    --hover: rgba(56, 189, 248, 0.12);
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+}
+
+[data-theme="light"] {
+    --bg-primary: #f8fafc;
+    --bg-secondary: #ffffff;
+    --bg-card: rgba(15, 23, 42, 0.04);
+    --bg: var(--bg-primary);
+    --sidebar: var(--bg-secondary);
+    --card: var(--bg-secondary);
+    --text: #111827;
+    --text-primary: var(--text);
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --primary: #2563eb;
+    --accent: var(--primary);
+    --input-bg: #ffffff;
+    --border: rgba(15, 23, 42, 0.15);
+    --hover: rgba(37, 99, 235, 0.10);
+}
+
+.light-theme {
+    color-scheme: light;
+}
+
+:root:not([data-theme="light"]) {
+    color-scheme: dark;
+}
+
+html,
+body {
+    background: var(--bg);
+    color: var(--text);
+}
+
+body {
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease;
+}
+
+.sidebar {
+    background: var(--sidebar);
+    border-color: var(--border);
+}
+
+.card {
+    background: var(--card);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--text);
+}
+
+p {
+    color: var(--text-secondary);
+}
+
+.logo,
+.card h2 {
+    color: var(--primary);
+}
+
+.menu a {
+    color: var(--text-secondary);
+}
+
+.menu a:hover {
+    background: var(--hover);
+    color: var(--text);
+}
+
+.menu a.active {
+    background: var(--primary);
+    color: #001018;
+}
+
+input,
+textarea,
+select {
+    background: var(--input-bg);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 3px solid rgba(56, 189, 248, 0.35);
+    outline-offset: 2px;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-secondary);
+}
+
+.form-group label,
+.setting-info h3 {
+    color: var(--text);
+}
+
+.setting-info p {
+    color: var(--text-secondary);
+}
+
+.card,
+.sidebar,
+input,
+textarea,
+select,
+.menu a {
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease;
+}

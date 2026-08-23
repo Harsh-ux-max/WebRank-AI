@@ -1,0 +1,2137 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Compare Websites | WebRank AI</title>
+
+
+  <!-- Theme -->
+  <script src="js/theme.js"></script>
+  <link rel="stylesheet" href="Css/app.css">
+
+  <style>
+    /* =========================================================
+       THEME VARIABLES
+    ========================================================= */
+
+    :root {
+      --bg: #0f172a;
+      --sidebar: #111827;
+      --card: #1e293b;
+      --text: #ffffff;
+      --text-secondary: #94a3b8;
+      --primary: #38bdf8;
+      --input-bg: #0f172a;
+      --border: rgba(255, 255, 255, 0.08);
+
+      --success: #0cce6b;
+      --danger: #ff4e42;
+
+      --glow: rgba(56, 189, 248, 0.15);
+      --soft-primary: rgba(56, 189, 248, 0.08);
+      --soft-success: rgba(12, 206, 107, 0.10);
+      --soft-danger: rgba(255, 78, 66, 0.10);
+
+      --shadow: rgba(0, 0, 0, 0.18);
+    }
+
+    /* LIGHT THEME */
+
+    .light-theme {
+      --bg: #f8fafc;
+      --sidebar: #ffffff;
+      --card: #ffffff;
+      --text: #111827;
+      --text-secondary: #475569;
+      --primary: #2563eb;
+      --input-bg: #ffffff;
+      --border: rgba(15, 23, 42, 0.12);
+
+      --success: #16a34a;
+      --danger: #dc2626;
+
+      --glow: rgba(37, 99, 235, 0.12);
+      --soft-primary: rgba(37, 99, 235, 0.07);
+      --soft-success: rgba(22, 163, 74, 0.09);
+      --soft-danger: rgba(220, 38, 38, 0.09);
+
+      --shadow: rgba(15, 23, 42, 0.08);
+    }
+
+    /* =========================================================
+       RESET
+    ========================================================= */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+
+      font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+
+      display: flex;
+      min-height: 100vh;
+
+      transition:
+        background 0.25s ease,
+        color 0.25s ease;
+    }
+
+    /* =========================================================
+       BACKGROUND GLOW
+    ========================================================= */
+
+    body::before {
+      content: "";
+
+      position: fixed;
+
+      width: 600px;
+      height: 600px;
+
+      background:
+        radial-gradient(
+          circle,
+          var(--primary),
+          transparent 60%
+        );
+
+      filter: blur(120px);
+
+      opacity: 0.12;
+
+      top: -150px;
+      right: -150px;
+
+      pointer-events: none;
+
+      z-index: -1;
+    }
+
+    /* =========================================================
+       SIDEBAR
+    ========================================================= */
+
+    .sidebar {
+      width: 260px;
+      min-height: 100vh;
+
+      background: var(--sidebar);
+
+      padding: 30px 20px;
+
+      border-right: 1px solid var(--border);
+
+      position: fixed;
+
+      left: 0;
+      top: 0;
+      bottom: 0;
+
+      z-index: 100;
+
+      display: flex;
+      flex-direction: column;
+
+      transition:
+        background 0.25s ease,
+        border-color 0.25s ease;
+    }
+
+    /* =========================================================
+       LOGO
+    ========================================================= */
+
+    .logo {
+      font-size: 22px;
+
+      font-weight: 800;
+
+      color: var(--primary);
+
+      margin-bottom: 35px;
+
+      letter-spacing: -0.3px;
+    }
+
+    /* =========================================================
+       MENU
+    ========================================================= */
+
+    .menu {
+      list-style: none;
+
+      flex: 1;
+    }
+
+    .menu li {
+      margin: 8px 0;
+    }
+
+    .menu a {
+      text-decoration: none;
+
+      color: var(--text-secondary);
+
+      display: flex;
+      align-items: center;
+
+      padding: 12px;
+
+      border-radius: 10px;
+
+      transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .menu a:hover {
+      background: var(--soft-primary);
+
+      color: var(--primary);
+
+      transform: translateX(3px);
+    }
+
+    .menu a.active {
+      background: var(--primary);
+
+      color: #000;
+
+      font-weight: 600;
+    }
+
+    .menu a.active:hover {
+      background: var(--primary);
+
+      color: #000;
+
+      transform: none;
+    }
+
+    /* =========================================================
+       THEME TOGGLE
+    ========================================================= */
+
+    .theme-toggle-wrapper {
+      margin-top: auto;
+
+      padding-top: 20px;
+
+      border-top: 1px solid var(--border);
+    }
+
+    .theme-toggle {
+      width: 100%;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 13px 14px;
+
+      border-radius: 12px;
+
+      border: 1px solid var(--border);
+
+      background: var(--soft-primary);
+
+      color: var(--text);
+
+      cursor: pointer;
+
+      font-size: 14px;
+
+      transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      background: var(--soft-primary);
+
+      border-color: var(--primary);
+
+      transform: translateY(-1px);
+    }
+
+    .theme-toggle-left {
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+    }
+
+    .theme-icon {
+      font-size: 18px;
+    }
+
+    .theme-label {
+      font-weight: 600;
+    }
+
+    .theme-switch {
+      width: 42px;
+      height: 23px;
+
+      border-radius: 999px;
+
+      background: var(--text-secondary);
+
+      padding: 3px;
+
+      transition:
+        background 0.25s ease;
+    }
+
+    .theme-switch-dot {
+      width: 17px;
+      height: 17px;
+
+      border-radius: 50%;
+
+      background: var(--card);
+
+      transition:
+        transform 0.25s ease;
+    }
+
+    .light-theme .theme-switch {
+      background: var(--primary);
+    }
+
+    .light-theme .theme-switch-dot {
+      transform: translateX(19px);
+    }
+
+    /* =========================================================
+       MAIN
+    ========================================================= */
+
+    .container {
+      flex: 1;
+
+      margin-left: 260px;
+
+      width: calc(100% - 260px);
+
+      min-height: 100vh;
+
+      padding: 40px;
+
+      transition: background 0.25s ease;
+    }
+
+    /* =========================================================
+       HEADER
+    ========================================================= */
+
+    .header {
+      text-align: center;
+
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 42px;
+
+      font-weight: 800;
+
+      color: var(--text);
+
+      letter-spacing: -1px;
+
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: var(--text-secondary);
+
+      margin-top: 8px;
+
+      line-height: 1.6;
+    }
+
+    /* =========================================================
+       INPUT AREA
+    ========================================================= */
+
+    .compare-inputs {
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      gap: 15px;
+
+      margin-bottom: 40px;
+
+      flex-wrap: wrap;
+    }
+
+    .compare-inputs input {
+      width: 280px;
+
+      padding: 16px 20px;
+
+      border-radius: 14px;
+
+      border: 1px solid var(--border);
+
+      background: var(--input-bg);
+
+      color: var(--text);
+
+      font-size: 15px;
+
+      outline: none;
+
+      backdrop-filter: blur(10px);
+
+      transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease,
+        color 0.25s ease;
+    }
+
+    .compare-inputs input::placeholder {
+      color: var(--text-secondary);
+
+      opacity: 0.8;
+    }
+
+    .compare-inputs input:focus {
+      border-color: var(--primary);
+
+      box-shadow:
+        0 0 0 3px var(--soft-primary);
+    }
+
+    /* =========================================================
+       COMPARE BUTTON
+    ========================================================= */
+
+    .compare-inputs button {
+      padding: 16px 28px;
+
+      border: none;
+
+      border-radius: 14px;
+
+      background: var(--primary);
+
+      color: #000;
+
+      font-weight: 700;
+
+      font-size: 15px;
+
+      cursor: pointer;
+
+      transition:
+        transform 0.25s ease,
+        opacity 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    .compare-inputs button:hover {
+      transform: translateY(-3px);
+
+      opacity: 0.92;
+
+      box-shadow:
+        0 10px 25px var(--glow);
+    }
+
+    .compare-inputs button:active {
+      transform: translateY(0);
+    }
+
+    .compare-inputs button:disabled {
+      opacity: 0.6;
+
+      cursor: not-allowed;
+
+      transform: none;
+
+      box-shadow: none;
+    }
+
+    /* =========================================================
+       STATUS
+    ========================================================= */
+
+    .comparison-status {
+      display: none;
+
+      max-width: 620px;
+
+      margin: -15px auto 30px;
+
+      padding: 16px 20px;
+
+      border-radius: 14px;
+
+      text-align: center;
+
+      color: var(--primary);
+
+      background: var(--soft-primary);
+
+      border: 1px solid var(--border);
+
+      line-height: 1.5;
+    }
+
+    .comparison-status.show {
+      display: block;
+    }
+
+    /* =========================================================
+       COMPARISON GRID
+    ========================================================= */
+
+    .compare-grid {
+      display: grid;
+
+      grid-template-columns:
+        minmax(0, 1fr)
+        140px
+        minmax(0, 1fr);
+
+      gap: 25px;
+
+      align-items: center;
+    }
+
+    /* =========================================================
+       CARD
+    ========================================================= */
+
+    .card {
+      width: 100%;
+
+      background: var(--card);
+
+      color: var(--text);
+
+      border: 1px solid var(--border);
+
+      border-radius: 22px;
+
+      padding: 30px;
+
+      backdrop-filter: blur(20px);
+
+      box-shadow:
+        0 10px 40px var(--shadow);
+
+      transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    .card:hover {
+      box-shadow:
+        0 15px 45px var(--shadow);
+    }
+
+    .card h2 {
+      margin-bottom: 10px;
+    }
+
+    /* =========================================================
+       DOMAIN
+    ========================================================= */
+
+    .domain {
+      color: var(--text-secondary);
+
+      margin-bottom: 20px;
+
+      font-size: 15px;
+
+      word-break: break-word;
+    }
+
+    /* =========================================================
+       SCORE
+    ========================================================= */
+
+    .score {
+      font-size: 64px;
+
+      font-weight: 800;
+
+      margin-bottom: 20px;
+
+      line-height: 1;
+
+      letter-spacing: -2px;
+    }
+
+    .you .score {
+      color: var(--success);
+    }
+
+    .competitor .score {
+      color: var(--danger);
+    }
+
+    /* =========================================================
+       METRICS
+    ========================================================= */
+
+    .metric {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 15px;
+
+      padding: 14px;
+
+      margin: 10px 0;
+
+      background: var(--soft-primary);
+
+      border: 1px solid var(--border);
+
+      border-radius: 14px;
+
+      color: var(--text);
+
+      transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+    }
+
+    .metric:hover {
+      border-color: var(--primary);
+    }
+
+    .metric span:first-child {
+      color: var(--text-secondary);
+    }
+
+    .metric span:last-child {
+      color: var(--primary);
+
+      font-weight: 700;
+    }
+
+    /* =========================================================
+       VS
+    ========================================================= */
+
+    .vs {
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      font-size: 28px;
+
+      font-weight: 800;
+
+      color: var(--primary);
+
+      background: var(--soft-primary);
+
+      border: 1px solid var(--border);
+
+      border-radius: 16px;
+
+      height: 120px;
+
+      user-select: none;
+    }
+
+    /* =========================================================
+       WINNER
+    ========================================================= */
+
+    .winner {
+      text-align: center;
+
+      margin-top: 40px;
+    }
+
+    .winner-badge {
+      display: inline-block;
+
+      padding: 14px 26px;
+
+      border-radius: 999px;
+
+      background: var(--soft-success);
+
+      border: 1px solid rgba(12, 206, 107, 0.3);
+
+      color: var(--success);
+
+      font-weight: 700;
+
+      line-height: 1.4;
+    }
+
+    /* =========================================================
+       SUMMARY
+    ========================================================= */
+
+    .summary {
+      margin-top: 40px;
+    }
+
+    .summary-card {
+      background: var(--card);
+
+      color: var(--text);
+
+      border: 1px solid var(--border);
+
+      padding: 25px;
+
+      border-radius: 22px;
+
+      box-shadow:
+        0 10px 40px var(--shadow);
+
+      transition:
+        background 0.25s ease,
+        border-color 0.25s ease;
+    }
+
+    .summary-card h2 {
+      margin-bottom: 15px;
+
+      color: var(--text);
+    }
+
+    .summary-card ul {
+      padding-left: 18px;
+
+      color: var(--text-secondary);
+    }
+
+    .summary-card li {
+      margin: 10px 0;
+
+      line-height: 1.6;
+    }
+
+    /* =========================================================
+       AI SUMMARY
+    ========================================================= */
+
+    .ai-summary {
+      color: var(--text-secondary);
+
+      line-height: 1.8;
+
+      font-size: 16px;
+    }
+
+    .ai-summary p {
+      margin: 0;
+    }
+
+    .ai-summary.loading {
+      color: var(--primary);
+    }
+
+    /* =========================================================
+       BUTTONS
+    ========================================================= */
+
+    .buttons {
+      margin-top: 30px;
+
+      text-align: center;
+    }
+
+    .btn {
+      padding: 14px 24px;
+
+      border: none;
+
+      border-radius: 12px;
+
+      background: var(--primary);
+
+      color: #000;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      margin: 8px;
+
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 8px 20px var(--glow);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+
+      cursor: not-allowed;
+
+      transform: none;
+
+      box-shadow: none;
+    }
+
+    /* =========================================================
+       LIGHT THEME POLISH
+    ========================================================= */
+
+    .light-theme .card,
+    .light-theme .summary-card {
+      box-shadow:
+        0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    .light-theme .compare-inputs input {
+      box-shadow:
+        0 4px 15px rgba(15, 23, 42, 0.04);
+    }
+
+    /* =========================================================
+       ACCESSIBILITY
+    ========================================================= */
+
+    .compare-inputs input:focus-visible,
+    .compare-inputs button:focus-visible,
+    .btn:focus-visible,
+    .menu a:focus-visible,
+    .theme-toggle:focus-visible {
+      outline: 3px solid var(--soft-primary);
+
+      outline-offset: 2px;
+    }
+
+    /* =========================================================
+       PRINT
+    ========================================================= */
+
+    @media print {
+
+      .sidebar,
+      .compare-inputs,
+      .comparison-status,
+      .buttons {
+        display: none !important;
+      }
+
+      .container {
+        margin-left: 0;
+
+        width: 100%;
+
+        padding: 20px;
+      }
+
+      body {
+        background: white;
+
+        color: black;
+      }
+
+      .card,
+      .summary-card {
+        box-shadow: none;
+
+        border: 1px solid #ddd;
+      }
+    }
+
+    /* =========================================================
+       RESPONSIVE - TABLET
+    ========================================================= */
+
+    @media (max-width: 1100px) {
+
+      .container {
+        padding: 30px;
+      }
+
+      .compare-grid {
+        grid-template-columns:
+          minmax(0, 1fr)
+          100px
+          minmax(0, 1fr);
+
+        gap: 18px;
+      }
+
+      .card {
+        padding: 24px;
+      }
+
+      .score {
+        font-size: 54px;
+      }
+    }
+
+    /* =========================================================
+       RESPONSIVE - MOBILE
+    ========================================================= */
+
+    @media (max-width: 900px) {
+
+      body {
+        display: block;
+      }
+
+      .sidebar {
+        position: relative;
+
+        width: 100%;
+
+        min-height: auto;
+
+        padding: 20px;
+
+        border-right: none;
+
+        border-bottom:
+          1px solid var(--border);
+      }
+
+      .logo {
+        margin-bottom: 20px;
+      }
+
+      .menu {
+        display: flex;
+
+        gap: 8px;
+
+        flex-wrap: wrap;
+      }
+
+      .menu li {
+        margin: 0;
+      }
+
+      .menu a {
+        padding: 9px 11px;
+
+        font-size: 13px;
+      }
+
+      .theme-toggle-wrapper {
+        margin-top: 20px;
+
+        padding-top: 15px;
+      }
+
+      .container {
+        margin-left: 0;
+
+        width: 100%;
+
+        padding: 25px 20px;
+      }
+
+      .compare-grid {
+        grid-template-columns: 1fr;
+
+        gap: 20px;
+      }
+
+      .vs {
+        height: auto;
+
+        padding: 15px;
+
+        width: 100%;
+      }
+
+      .header h1 {
+        font-size: 32px;
+      }
+
+      .score {
+        font-size: 48px;
+      }
+
+      .compare-inputs {
+        flex-direction: column;
+
+        width: 100%;
+      }
+
+      .compare-inputs input,
+      .compare-inputs button {
+        width: 100%;
+      }
+    }
+
+    /* =========================================================
+       SMALL MOBILE
+    ========================================================= */
+
+    @media (max-width: 480px) {
+
+      .container {
+        padding: 20px 15px;
+      }
+
+      .header {
+        margin-bottom: 30px;
+      }
+
+      .header h1 {
+        font-size: 27px;
+
+        letter-spacing: -0.5px;
+      }
+
+      .header p {
+        font-size: 14px;
+      }
+
+      .card {
+        padding: 20px;
+
+        border-radius: 18px;
+      }
+
+      .summary-card {
+        padding: 20px;
+
+        border-radius: 18px;
+      }
+
+      .score {
+        font-size: 42px;
+      }
+
+      .metric {
+        padding: 12px;
+
+        font-size: 14px;
+      }
+
+      .menu {
+        max-height: 180px;
+
+        overflow-y: auto;
+      }
+
+      .menu a {
+        font-size: 12px;
+
+        padding: 8px 9px;
+      }
+
+      .btn {
+        width: calc(100% - 16px);
+      }
+    }
+
+    /* =========================================================
+       REDUCED MOTION
+    ========================================================= */
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+
+        transition-duration: 0.01ms !important;
+
+        animation-duration: 0.01ms !important;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="Css/app.css">
+</head>
+
+<body>
+
+  <!-- =======================================================
+       SIDEBAR
+  ======================================================== -->
+
+  <div class="sidebar">
+
+    <div class="logo">
+      WebRank AI
+    </div>
+
+    <ul class="menu">
+
+      <li>
+        <a href="index.html">
+          Home
+        </a>
+      </li>
+
+      <li>
+        <a href="dashboard.html">
+          Dashboard
+        </a>
+      </li>
+
+      <li>
+        <a href="analyze.html">
+          Analyze Website
+        </a>
+      </li>
+
+      <li>
+        <a href="results.html">
+          Reports
+        </a>
+      </li>
+
+      <li>
+        <a href="#" class="active">
+          Compare Sites
+        </a>
+      </li>
+
+      <li>
+        <a href="saved-reports.html">
+          Saved Reports
+        </a>
+      </li>
+
+      <li>
+        <a href="profile.html">
+          Profile
+        </a>
+      </li>
+
+      <li>
+        <a href="settings.html">
+          Settings
+        </a>
+      </li>
+
+      <li>
+        <a href="#" onclick="logout(); return false;">
+          Logout
+        </a>
+      </li>
+
+    </ul>
+
+  </div>
+
+
+  <!-- =======================================================
+       MAIN
+  ======================================================== -->
+
+  <div class="container">
+
+    <div class="header">
+
+      <h1>
+        Competitor Comparison
+      </h1>
+
+      <p>
+        AI-powered performance analysis between websites
+      </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         INPUTS
+    ====================================================== -->
+
+    <div class="compare-inputs">
+
+      <input
+        id="site1"
+        type="url"
+        placeholder="Your Website"
+        autocomplete="url"
+      />
+
+      <input
+        id="site2"
+        type="url"
+        placeholder="Competitor Website"
+        autocomplete="url"
+      />
+
+      <button
+        id="compareBtn"
+        onclick="compareSites()"
+      >
+        Compare
+      </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATUS
+    ====================================================== -->
+
+    <div
+      id="comparisonStatus"
+      class="comparison-status"
+      role="status"
+      aria-live="polite"
+    >
+      Preparing comparison...
+    </div>
+
+
+    <!-- =====================================================
+         COMPARISON GRID
+    ====================================================== -->
+
+    <div class="compare-grid">
+
+      <!-- YOUR WEBSITE -->
+
+      <div class="card you">
+
+        <h2>
+          Your Website
+        </h2>
+
+        <div
+          class="domain"
+          id="site1Domain"
+        >
+          No comparison yet
+        </div>
+
+        <div
+          class="score"
+          id="site1Score"
+        >
+          -
+        </div>
+
+        <div class="metric">
+          <span>Performance</span>
+          <span id="site1Perf">-</span>
+        </div>
+
+        <div class="metric">
+          <span>SEO</span>
+          <span id="site1Seo">-</span>
+        </div>
+
+        <div class="metric">
+          <span>Accessibility</span>
+          <span id="site1Acc">-</span>
+        </div>
+
+        <div class="metric">
+          <span>Best Practices</span>
+          <span id="site1Bp">-</span>
+        </div>
+
+      </div>
+
+
+      <!-- VS -->
+
+      <div class="vs">
+        VS
+      </div>
+
+
+      <!-- COMPETITOR -->
+
+      <div class="card competitor">
+
+        <h2>
+          Competitor
+        </h2>
+
+        <div
+          class="domain"
+          id="site2Domain"
+        >
+          No comparison yet
+        </div>
+
+        <div
+          class="score"
+          id="site2Score"
+        >
+          -
+        </div>
+
+        <div class="metric">
+          <span>Performance</span>
+          <span id="site2Perf">-</span>
+        </div>
+
+        <div class="metric">
+          <span>SEO</span>
+          <span id="site2Seo">-</span>
+        </div>
+
+        <div class="metric">
+          <span>Accessibility</span>
+          <span id="site2Acc">-</span>
+        </div>
+
+        <div class="metric">
+          <span>Best Practices</span>
+          <span id="site2Bp">-</span>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         WINNER
+    ====================================================== -->
+
+    <div class="winner">
+
+      <div
+        class="winner-badge"
+        id="winnerBadge"
+      >
+        🏆 Waiting for comparison...
+      </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         AI SUMMARY
+    ====================================================== -->
+
+    <div class="summary">
+
+      <div class="summary-card">
+
+        <h2>
+          AI Comparison Summary
+        </h2>
+
+        <div
+          id="summaryList"
+          class="ai-summary"
+        >
+
+          <p>
+            Compare two websites to generate AI insights.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ACTIONS
+    ====================================================== -->
+
+    <div class="buttons">
+
+      <button
+        class="btn"
+        onclick="window.print()"
+      >
+        Download Report
+      </button>
+
+      <a href="analyze.html">
+        <button class="btn">
+          Analyze Another
+        </button>
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
+       JAVASCRIPT
+  ======================================================== -->
+
+  <script src="js/api.js"></script>
+  <script src="js/sidebar.js" defer></script>
+
+  <script>
+
+    /* =======================================================
+       AUTHENTICATION
+    ======================================================== */
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      window.location.href = "login.html";
+    }
+
+
+    /* =======================================================
+       COMPARISON STATUS
+    ======================================================== */
+
+    function setComparisonStatus(message) {
+
+      const status =
+        document.getElementById(
+          "comparisonStatus"
+        );
+
+      status.textContent = message;
+
+      status.classList.add("show");
+
+    }
+
+
+    function hideComparisonStatus() {
+
+      document
+        .getElementById("comparisonStatus")
+        .classList.remove("show");
+
+    }
+
+
+    /* =======================================================
+       SCORE HELPERS
+    ======================================================== */
+
+    function normalizeScore(value) {
+
+      const score = Number(value);
+
+      return Number.isFinite(score)
+        ? Math.max(
+            0,
+            Math.min(
+              100,
+              Math.round(score)
+            )
+          )
+        : null;
+
+    }
+
+
+    function calculateOverallScore(scores) {
+
+      const availableScores =
+        Object.values(scores)
+          .filter(
+            score => score !== null
+          );
+
+      return availableScores.length
+        ? Math.round(
+            availableScores.reduce(
+              (total, score) =>
+                total + score,
+              0
+            ) / availableScores.length
+          )
+        : null;
+
+    }
+
+
+    function displayScore(score) {
+
+      return score === null
+        ? "-"
+        : score;
+
+    }
+
+
+    /* =======================================================
+       COMPARE WEBSITES
+    ======================================================== */
+
+    async function compareSites() {
+
+      const token =
+        localStorage.getItem("token");
+
+      let site1 =
+        document
+          .getElementById("site1")
+          .value
+          .trim();
+
+      let site2 =
+        document
+          .getElementById("site2")
+          .value
+          .trim();
+
+
+      /* VALIDATION */
+
+      if (!site1 || !site2) {
+
+        alert(
+          "Please enter both website URLs"
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+        [site1, site2].forEach(site => {
+
+          const url =
+            new URL(site);
+
+          if (
+            ![
+              "http:",
+              "https:"
+            ].includes(
+              url.protocol
+            )
+          ) {
+
+            throw new Error();
+
+          }
+
+        });
+
+      } catch {
+
+        alert(
+          "Please enter valid URLs starting with http:// or https://"
+        );
+
+        return;
+
+      }
+
+
+      /* LOADING */
+
+      const btn =
+        document.getElementById(
+          "compareBtn"
+        );
+
+      const loadingTimers = [];
+
+      btn.disabled = true;
+
+      btn.textContent =
+        "Comparing...";
+
+
+      setComparisonStatus(
+        "Analyzing Website 1..."
+      );
+
+
+      loadingTimers.push(
+
+        setTimeout(
+          () =>
+            setComparisonStatus(
+              "Analyzing Website 2..."
+            ),
+          700
+        ),
+
+        setTimeout(
+          () =>
+            setComparisonStatus(
+              "Preparing comparison..."
+            ),
+          1400
+        )
+
+      );
+
+
+      try {
+
+        /* =================================================
+           WEBSITE COMPARISON API
+        ================================================= */
+
+        const response =
+          await apiFetch(
+            "/api/compare",
+            {
+
+              method: "POST",
+
+              headers: {
+
+                "Content-Type":
+                  "application/json",
+
+                "Authorization":
+                  "Bearer " + token
+
+              },
+
+              body:
+                JSON.stringify({
+
+                  url1: site1,
+
+                  url2: site2
+
+                })
+
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        console.log(
+          "Response Status:",
+          response.status
+        );
+
+        console.log(
+          "Response Data:",
+          data
+        );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.message ||
+            "Unable to compare the websites."
+          );
+
+        }
+
+
+        const site1Data =
+          data.report1;
+
+        const site2Data =
+          data.report2;
+
+
+        console.log(site1Data);
+        console.log(site2Data);
+
+
+        /* =================================================
+           NORMALIZE SITE 1
+        ================================================= */
+
+        const site1Scores = {
+
+          performance:
+            normalizeScore(
+              site1Data.performance
+            ),
+
+          seo:
+            normalizeScore(
+              site1Data.seo
+            ),
+
+          accessibility:
+            normalizeScore(
+              site1Data.accessibility
+            ),
+
+          bestPractices:
+            normalizeScore(
+              site1Data.bestPractices
+            )
+
+        };
+
+
+        /* =================================================
+           NORMALIZE SITE 2
+        ================================================= */
+
+        const site2Scores = {
+
+          performance:
+            normalizeScore(
+              site2Data.performance
+            ),
+
+          seo:
+            normalizeScore(
+              site2Data.seo
+            ),
+
+          accessibility:
+            normalizeScore(
+              site2Data.accessibility
+            ),
+
+          bestPractices:
+            normalizeScore(
+              site2Data.bestPractices
+            )
+
+        };
+
+
+        /* =================================================
+           OVERALL SCORE
+        ================================================= */
+
+        const score1 =
+          calculateOverallScore({
+
+            performance:
+              site1Scores.performance,
+
+            accessibility:
+              site1Scores.accessibility,
+
+            seo:
+              site1Scores.seo,
+
+            bestPractices:
+              site1Scores.bestPractices
+
+          });
+
+
+        const score2 =
+          calculateOverallScore({
+
+            performance:
+              site2Scores.performance,
+
+            accessibility:
+              site2Scores.accessibility,
+
+            seo:
+              site2Scores.seo,
+
+            bestPractices:
+              site2Scores.bestPractices
+
+          });
+
+
+        /* =================================================
+           DOMAINS
+        ================================================= */
+
+        document
+          .getElementById(
+            "site1Domain"
+          )
+          .textContent = site1;
+
+        document
+          .getElementById(
+            "site2Domain"
+          )
+          .textContent = site2;
+
+
+        /* =================================================
+           OVERALL SCORES
+        ================================================= */
+
+        document
+          .getElementById(
+            "site1Score"
+          )
+          .textContent =
+            score1 === null
+              ? "-"
+              : score1 + "/100";
+
+
+        document
+          .getElementById(
+            "site2Score"
+          )
+          .textContent =
+            score2 === null
+              ? "-"
+              : score2 + "/100";
+
+
+        /* =================================================
+           SITE 1 METRICS
+        ================================================= */
+
+        document
+          .getElementById(
+            "site1Perf"
+          )
+          .textContent =
+            displayScore(
+              site1Scores.performance
+            );
+
+
+        document
+          .getElementById(
+            "site1Seo"
+          )
+          .textContent =
+            displayScore(
+              site1Scores.seo
+            );
+
+
+        document
+          .getElementById(
+            "site1Acc"
+          )
+          .textContent =
+            displayScore(
+              site1Scores.accessibility
+            );
+
+
+        document
+          .getElementById(
+            "site1Bp"
+          )
+          .textContent =
+            displayScore(
+              site1Scores.bestPractices
+            );
+
+
+        /* =================================================
+           SITE 2 METRICS
+        ================================================= */
+
+        document
+          .getElementById(
+            "site2Perf"
+          )
+          .textContent =
+            displayScore(
+              site2Scores.performance
+            );
+
+
+        document
+          .getElementById(
+            "site2Seo"
+          )
+          .textContent =
+            displayScore(
+              site2Scores.seo
+            );
+
+
+        document
+          .getElementById(
+            "site2Acc"
+          )
+          .textContent =
+            displayScore(
+              site2Scores.accessibility
+            );
+
+
+        document
+          .getElementById(
+            "site2Bp"
+          )
+          .textContent =
+            displayScore(
+              site2Scores.bestPractices
+            );
+
+
+        /* =================================================
+           WINNER
+        ================================================= */
+
+        let winnerText = "";
+
+
+        if (
+          score1 === null ||
+          score2 === null
+        ) {
+
+          winnerText =
+            "Comparison complete — some scores were unavailable.";
+
+        }
+
+        else if (score1 > score2) {
+
+          winnerText =
+            `🏆 ${site1} wins by ${score1 - score2} points`;
+
+        }
+
+        else if (score2 > score1) {
+
+          winnerText =
+            `🏆 ${site2} wins by ${score2 - score1} points`;
+
+        }
+
+        else {
+
+          winnerText =
+            "🤝 Both websites have equal scores";
+
+        }
+
+
+        document
+          .getElementById(
+            "winnerBadge"
+          )
+          .textContent =
+            winnerText;
+
+
+        /* =================================================
+           AI SUMMARY
+        ================================================= */
+
+        document
+          .getElementById(
+            "summaryList"
+          )
+          .innerHTML =
+            "<li>🤖 Generating AI comparison...</li>";
+
+
+        try {
+
+          const aiResponse =
+            await apiFetch(
+              "/api/compare-ai/summary",
+              {
+
+                method: "POST",
+
+                headers: {
+
+                  "Content-Type":
+                    "application/json",
+
+                  "Authorization":
+                    "Bearer " + token
+
+                },
+
+                body:
+                  JSON.stringify({
+
+                    site1: site1,
+
+                    site2: site2,
+
+                    performance1:
+                      site1Scores.performance,
+
+                    accessibility1:
+                      site1Scores.accessibility,
+
+                    seo1:
+                      site1Scores.seo,
+
+                    bestPractices1:
+                      site1Scores.bestPractices,
+
+                    performance2:
+                      site2Scores.performance,
+
+                    accessibility2:
+                      site2Scores.accessibility,
+
+                    seo2:
+                      site2Scores.seo,
+
+                    bestPractices2:
+                      site2Scores.bestPractices
+
+                  })
+
+              }
+            );
+
+
+          const aiData =
+            await aiResponse.json();
+
+
+          if (!aiResponse.ok) {
+
+            throw new Error(
+              aiData.message ||
+              "AI summary failed."
+            );
+
+          }
+
+
+          const summaryText =
+            aiData.summary ||
+            "No AI summary available.";
+
+
+          const summaryList = document.getElementById("summaryList");
+          summaryList.replaceChildren();
+          const summaryItem = document.createElement("li");
+          summaryItem.textContent = summaryText;
+          summaryList.appendChild(summaryItem);
+
+
+        } catch (aiError) {
+
+          console.error(
+            "AI COMPARISON ERROR:",
+            aiError
+          );
+
+
+          document
+            .getElementById(
+              "summaryList"
+            )
+            .innerHTML =
+              `
+              <li>
+                ⚠️ AI comparison summary is currently unavailable.
+              </li>
+              `;
+
+        }
+
+      } catch (err) {
+
+        console.error(
+          "COMPARE ERROR:",
+          err
+        );
+
+        console.log(err);
+
+        alert(
+          err.message ||
+          "Unknown Error"
+        );
+
+      }
+
+      finally {
+
+        loadingTimers.forEach(
+          clearTimeout
+        );
+
+        hideComparisonStatus();
+
+        btn.disabled = false;
+
+        btn.textContent =
+          "Compare";
+
+      }
+
+    }
+
+
+    /* =======================================================
+       LOGOUT
+    ======================================================== */
+
+    function logout() {
+
+      localStorage.removeItem(
+        "token"
+      );
+
+      localStorage.removeItem(
+        "user"
+      );
+
+      window.location.href =
+        "login.html";
+
+    }
+
+  </script>
+
+
+  <!-- TOASTIFY -->
+
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+  <script src="js/toast.js?v=2"></script>
+
+</body>
+
+</html>

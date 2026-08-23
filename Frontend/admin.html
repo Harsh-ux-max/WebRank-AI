@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin Dashboard | WebRank AI</title>
+
+  <!-- Theme must load before page rendering -->
+  <script src="js/theme.js"></script>
+
+  <link rel="icon" href="favicon.png">
+
+  <style>
+    :root {
+      --primary: #38bdf8;
+      --primary-hover: #0ea5e9;
+
+      --bg: #0b1220;
+      --sidebar-bg: #0f172a;
+      --card-bg: rgba(255, 255, 255, 0.035);
+
+      --text: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(56, 189, 248, 0.35);
+
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.1);
+
+      --success: #22c55e;
+      --success-bg: rgba(34, 197, 94, 0.1);
+
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    /*
+      Light theme.
+      This is also compatible with theme.js if it adds
+      the "light" class to body or html.
+    */
+    body.light,
+    html.light body {
+      --bg: #f8fafc;
+      --sidebar-bg: #ffffff;
+      --card-bg: #ffffff;
+
+      --text: #0f172a;
+      --text-secondary: #64748b;
+      --text-muted: #94a3b8;
+
+      --border: rgba(15, 23, 42, 0.1);
+      --border-hover: rgba(14, 165, 233, 0.35);
+
+      --shadow: 0 15px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      transition:
+        background 0.25s ease,
+        color 0.25s ease;
+    }
+
+    /* ================================
+       BACKGROUND GLOW
+    ================================= */
+
+    body::before {
+      content: "";
+      position: fixed;
+
+      width: 600px;
+      height: 600px;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(56, 189, 248, 0.22),
+          transparent 65%
+        );
+
+      filter: blur(120px);
+
+      top: -180px;
+      right: -180px;
+
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* ================================
+       SIDEBAR
+    ================================= */
+
+    .sidebar {
+      position: fixed;
+
+      left: 0;
+      top: 0;
+
+      width: 250px;
+      height: 100vh;
+
+      padding: 26px 18px;
+
+      background: var(--sidebar-bg);
+
+      border-right:
+        1px solid var(--border);
+
+      display: flex;
+      flex-direction: column;
+
+      z-index: 100;
+
+      transition:
+        background 0.25s ease,
+        border-color 0.25s ease;
+    }
+
+    .brand {
+      padding:
+        4px 10px
+        28px;
+
+      border-bottom:
+        1px solid var(--border);
+
+      margin-bottom: 25px;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+
+      letter-spacing: -0.5px;
+
+      color: var(--primary);
+    }
+
+    .admin-label {
+      padding: 0 10px;
+
+      margin-bottom: 12px;
+
+      color: var(--text-muted);
+
+      font-size: 11px;
+      font-weight: 700;
+
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu li {
+      margin-bottom: 5px;
+    }
+
+    .menu button {
+      width: 100%;
+
+      min-height: 44px;
+
+      padding: 11px 13px;
+
+      border: 1px solid transparent;
+      border-radius: 10px;
+
+      background: transparent;
+
+      color: var(--text-secondary);
+
+      display: flex;
+      align-items: center;
+
+      text-align: left;
+
+      cursor: pointer;
+
+      font-size: 14px;
+      font-weight: 500;
+
+      transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .menu button:hover {
+      background:
+        rgba(56, 189, 248, 0.08);
+
+      color: var(--text);
+
+      border-color:
+        rgba(56, 189, 248, 0.12);
+    }
+
+    .menu button.active {
+      background: var(--primary);
+
+      color: #06111a;
+
+      font-weight: 700;
+
+      box-shadow:
+        0 8px 25px
+        rgba(56, 189, 248, 0.18);
+    }
+
+    .menu button:active {
+      transform: scale(0.98);
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+
+      padding-top: 18px;
+
+      border-top:
+        1px solid var(--border);
+    }
+
+    .logout {
+      width: 100%;
+
+      min-height: 44px;
+
+      padding: 11px 13px;
+
+      border:
+        1px solid
+        rgba(239, 68, 68, 0.18);
+
+      border-radius: 10px;
+
+      background:
+        rgba(239, 68, 68, 0.06);
+
+      color: var(--danger);
+
+      cursor: pointer;
+
+      font-size: 14px;
+      font-weight: 600;
+
+      transition: 0.2s ease;
+    }
+
+    .logout:hover {
+      background:
+        rgba(239, 68, 68, 0.12);
+
+      border-color:
+        rgba(239, 68, 68, 0.35);
+    }
+
+    /* ================================
+       MAIN
+    ================================= */
+
+    .main {
+      margin-left: 250px;
+
+      min-height: 100vh;
+
+      padding:
+        38px
+        42px;
+    }
+
+    .main-inner {
+      max-width: 1500px;
+      margin: auto;
+    }
+
+    /* ================================
+       HEADER
+    ================================= */
+
+    .header {
+      display: flex;
+
+      justify-content: space-between;
+      align-items: flex-start;
+
+      gap: 20px;
+
+      margin-bottom: 32px;
+    }
+
+    .header h1 {
+      font-size: 36px;
+
+      line-height: 1.15;
+
+      letter-spacing: -1px;
+    }
+
+    .header p {
+      color: var(--text-secondary);
+
+      margin-top: 8px;
+
+      font-size: 14px;
+    }
+
+    .header-actions {
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+    }
+
+    .refresh-btn {
+      min-height: 42px;
+
+      padding:
+        0 17px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 10px;
+
+      background: var(--card-bg);
+
+      color: var(--text);
+
+      cursor: pointer;
+
+      font-size: 13px;
+      font-weight: 600;
+
+      transition: 0.2s ease;
+    }
+
+    .refresh-btn:hover {
+      border-color: var(--border-hover);
+
+      color: var(--primary);
+    }
+
+    .refresh-btn.loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* ================================
+       STATISTICS
+    ================================= */
+
+    .stats {
+      display: grid;
+
+      grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+      gap: 18px;
+
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      position: relative;
+
+      padding: 23px;
+
+      background: var(--card-bg);
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 17px;
+
+      box-shadow: var(--shadow);
+
+      overflow: hidden;
+
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.25s ease;
+    }
+
+    .stat-card::after {
+      content: "";
+
+      position: absolute;
+
+      width: 100px;
+      height: 100px;
+
+      right: -45px;
+      bottom: -45px;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(56, 189, 248, 0.13),
+          transparent 70%
+        );
+
+      pointer-events: none;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+
+      border-color:
+        var(--border-hover);
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .number {
+      margin-top: 13px;
+
+      color: var(--primary);
+
+      font-size: 34px;
+      font-weight: 800;
+
+      letter-spacing: -1px;
+    }
+
+    .stat-description {
+      margin-top: 6px;
+
+      color: var(--text-muted);
+
+      font-size: 11px;
+    }
+
+    /* ================================
+       CONTENT SECTION
+    ================================= */
+
+    .section {
+      background: var(--card-bg);
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 18px;
+
+      box-shadow: var(--shadow);
+
+      overflow: hidden;
+    }
+
+    .section-header {
+      padding:
+        22px 24px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 20px;
+
+      border-bottom:
+        1px solid var(--border);
+    }
+
+    .section-header h2 {
+      font-size: 18px;
+
+      letter-spacing: -0.3px;
+    }
+
+    .section-header p {
+      color: var(--text-secondary);
+
+      margin-top: 5px;
+
+      font-size: 12px;
+    }
+
+    /* ================================
+       SEARCH
+    ================================= */
+
+    .search-wrapper {
+      position: relative;
+
+      width: 260px;
+    }
+
+    .search-wrapper input {
+      width: 100%;
+
+      height: 40px;
+
+      padding:
+        0 13px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 9px;
+
+      background:
+        rgba(255, 255, 255, 0.025);
+
+      color: var(--text);
+
+      outline: none;
+
+      font-size: 13px;
+
+      transition: 0.2s ease;
+    }
+
+    .search-wrapper input:focus {
+      border-color:
+        var(--primary);
+    }
+
+    .search-wrapper input::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* ================================
+       TABLE
+    ================================= */
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+
+      border-collapse: collapse;
+
+      min-width: 720px;
+    }
+
+    th,
+    td {
+      padding:
+        15px 24px;
+
+      text-align: left;
+
+      border-bottom:
+        1px solid var(--border);
+
+      white-space: nowrap;
+    }
+
+    th {
+      color: var(--text-muted);
+
+      font-size: 11px;
+
+      font-weight: 700;
+
+      text-transform: uppercase;
+
+      letter-spacing: 0.7px;
+
+      background:
+        rgba(255, 255, 255, 0.015);
+    }
+
+    td {
+      color: var(--text-secondary);
+
+      font-size: 13px;
+    }
+
+    tbody tr {
+      transition:
+        background 0.15s ease;
+    }
+
+    tbody tr:hover {
+      background:
+        rgba(56, 189, 248, 0.035);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .user-name {
+      color: var(--text);
+
+      font-weight: 600;
+    }
+
+    .user-email {
+      color: var(--text-secondary);
+    }
+
+    /* ================================
+       ROLE BADGES
+    ================================= */
+
+    .role {
+      display: inline-flex;
+
+      align-items: center;
+
+      padding:
+        5px 9px;
+
+      border-radius: 20px;
+
+      font-size: 11px;
+
+      font-weight: 700;
+
+      text-transform: capitalize;
+    }
+
+    .role.admin {
+      color: var(--primary);
+
+      background:
+        rgba(56, 189, 248, 0.1);
+
+      border:
+        1px solid
+        rgba(56, 189, 248, 0.2);
+    }
+
+    .role.user {
+      color: var(--text-secondary);
+
+      background:
+        rgba(148, 163, 184, 0.08);
+
+      border:
+        1px solid
+        rgba(148, 163, 184, 0.15);
+    }
+
+    /* ================================
+       STATES
+    ================================= */
+
+    .loading,
+    .empty,
+    .error {
+      padding:
+        45px 25px;
+
+      text-align: center;
+
+      font-size: 13px;
+    }
+
+    .loading,
+    .empty {
+      color: var(--text-secondary);
+    }
+
+    .error {
+      color: var(--danger);
+
+      background:
+        var(--danger-bg);
+    }
+
+    /* ================================
+       MOBILE HEADER
+    ================================= */
+
+    .mobile-header {
+      display: none;
+    }
+
+    .mobile-menu-btn {
+      width: 42px;
+      height: 42px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 10px;
+
+      background: var(--card-bg);
+
+      color: var(--text);
+
+      cursor: pointer;
+
+      font-size: 18px;
+    }
+
+    .sidebar-overlay {
+      display: none;
+
+      position: fixed;
+
+      inset: 0;
+
+      background:
+        rgba(0, 0, 0, 0.5);
+
+      z-index: 90;
+    }
+
+    /* ================================
+       RESPONSIVE
+    ================================= */
+
+    @media (max-width: 1100px) {
+
+      .stats {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+
+      .main {
+        padding: 30px;
+      }
+
+    }
+
+    @media (max-width: 800px) {
+
+      .sidebar {
+        transform:
+          translateX(-100%);
+
+        transition:
+          transform 0.25s ease;
+      }
+
+      .sidebar.open {
+        transform:
+          translateX(0);
+      }
+
+      .sidebar-overlay.active {
+        display: block;
+      }
+
+      .main {
+        margin-left: 0;
+
+        padding:
+          20px;
+      }
+
+      .mobile-header {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        margin-bottom: 25px;
+      }
+
+      .mobile-logo {
+        color: var(--primary);
+
+        font-size: 20px;
+        font-weight: 800;
+      }
+
+      .header {
+        flex-direction: column;
+      }
+
+      .header-actions {
+        width: 100%;
+      }
+
+      .refresh-btn {
+        width: 100%;
+      }
+
+      .section-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+      }
+
+      .search-wrapper {
+        width: 100%;
+      }
+
+    }
+
+    @media (max-width: 550px) {
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 28px;
+      }
+
+      .main {
+        padding: 16px;
+      }
+
+      .stat-card {
+        padding: 20px;
+      }
+
+    }
+
+  </style>
+
+  <link rel="stylesheet" href="Css/app.css">
+
+</head>
+
+<body>
+
+  <!-- ================================
+       SIDEBAR OVERLAY
+  ================================= -->
+
+  <div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+    onclick="closeSidebar()">
+  </div>
+
+
+  <!-- ================================
+       SIDEBAR
+  ================================= -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+      <div class="logo">
+        WebRank AI
+      </div>
+    </div>
+
+    <div class="admin-label">
+      Administration
+    </div>
+
+    <ul class="menu">
+
+      <li>
+        <button
+          class="active"
+          type="button"
+          onclick="showDashboard()">
+
+          Dashboard
+
+        </button>
+      </li>
+
+      <li>
+        <button
+          type="button"
+          onclick="loadUsers(); closeSidebar();">
+
+          Users
+
+        </button>
+      </li>
+
+      <li>
+        <button
+          type="button"
+          onclick="refreshDashboard(); closeSidebar();">
+
+          Refresh Data
+
+        </button>
+      </li>
+
+    </ul>
+
+    <div class="sidebar-bottom">
+
+      <button
+        class="logout"
+        type="button"
+        onclick="logout()">
+
+        Logout
+
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ================================
+       MAIN
+  ================================= -->
+
+  <main class="main">
+
+    <div class="main-inner">
+
+      <!-- Mobile Header -->
+
+      <div class="mobile-header">
+
+        <div class="mobile-logo">
+          WebRank AI
+        </div>
+
+        <button
+          class="mobile-menu-btn"
+          type="button"
+          onclick="toggleSidebar()"
+          aria-label="Open navigation">
+
+          ☰
+
+        </button>
+
+      </div>
+
+
+      <!-- ================================
+           PAGE HEADER
+      ================================= -->
+
+      <header class="header">
+
+        <div>
+
+          <h1>
+            Admin Dashboard
+          </h1>
+
+          <p>
+            Monitor users, reports, and platform activity.
+          </p>
+
+        </div>
+
+        <div class="header-actions">
+
+          <button
+            class="refresh-btn"
+            id="refreshButton"
+            type="button"
+            onclick="refreshDashboard()">
+
+            Refresh Data
+
+          </button>
+
+        </div>
+
+      </header>
+
+
+      <!-- ================================
+           STATISTICS
+      ================================= -->
+
+      <section class="stats">
+
+        <div class="stat-card">
+
+          <div class="stat-label">
+            Total Users
+          </div>
+
+          <div
+            class="number"
+            id="totalUsers">
+
+            -
+
+          </div>
+
+          <div class="stat-description">
+            Registered accounts
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-label">
+            Total Reports
+          </div>
+
+          <div
+            class="number"
+            id="totalReports">
+
+            -
+
+          </div>
+
+          <div class="stat-description">
+            Website audit reports
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-label">
+            Admin Users
+          </div>
+
+          <div
+            class="number"
+            id="adminUsers">
+
+            -
+
+          </div>
+
+          <div class="stat-description">
+            Administrator accounts
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-label">
+            Normal Users
+          </div>
+
+          <div
+            class="number"
+            id="normalUsers">
+
+            -
+
+          </div>
+
+          <div class="stat-description">
+            Standard accounts
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ================================
+           USERS SECTION
+      ================================= -->
+
+      <section class="section">
+
+        <div class="section-header">
+
+          <div>
+
+            <h2>
+              Registered Users
+            </h2>
+
+            <p>
+              View accounts currently registered on WebRank AI.
+            </p>
+
+          </div>
+
+          <div class="search-wrapper">
+
+            <input
+              type="search"
+              id="userSearch"
+              placeholder="Search users..."
+              autocomplete="off"
+              oninput="filterUsers()">
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="usersContainer"
+          class="loading">
+
+          Loading users...
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+
+  <!-- ================================
+       JAVASCRIPT
+  ================================= -->
+
+  <script src="js/api.js"></script>
+
+  <script src="js/sidebar.js" defer></script>
+
+
+  <script>
+
+    /* =================================
+       AUTHENTICATION
+    ================================= */
+
+    const token =
+      localStorage.getItem("token");
+
+    let signedInUser = null;
+
+    let allUsers = [];
+
+
+    try {
+
+      signedInUser =
+        JSON.parse(
+          localStorage.getItem("user") || "null"
+        );
+
+    } catch (error) {
+
+      console.warn(
+        "Invalid stored user data."
+      );
+
+    }
+
+
+    /*
+      Redirect unauthenticated users.
+    */
+
+    if (!token) {
+
+      window.location.href =
+        "login.html";
+
+    }
+
+
+    /*
+      Admin-only protection.
+    */
+
+    if (
+      !signedInUser ||
+      signedInUser.role !== "admin"
+    ) {
+
+      window.location.href =
+        "dashboard.html";
+
+    }
+
+
+    /* =================================
+       API HELPER
+    ================================= */
+
+    async function adminFetch(url, options = {}) {
+
+      const response =
+        await apiFetch(
+          url,
+          {
+            ...options,
+
+            headers: {
+              ...(options.headers || {}),
+
+              Authorization:
+                "Bearer " + token
+            }
+          }
+        );
+
+
+      let data;
+
+      try {
+
+        data =
+          await response.json();
+
+      } catch {
+
+        throw new Error(
+          "Invalid server response."
+        );
+
+      }
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          data.message ||
+          "Request failed."
+        );
+
+      }
+
+
+      return data;
+
+    }
+
+
+    /* =================================
+       LOAD STATISTICS
+    ================================= */
+
+    async function loadStats() {
+
+      try {
+
+        const data =
+          await adminFetch(
+            "/api/admin/stats"
+          );
+
+
+        const stats =
+          data.stats || {};
+
+
+        document.getElementById(
+          "totalUsers"
+        ).textContent =
+          Number(stats.totalUsers || 0);
+
+
+        document.getElementById(
+          "totalReports"
+        ).textContent =
+          Number(stats.totalReports || 0);
+
+
+        document.getElementById(
+          "adminUsers"
+        ).textContent =
+          Number(stats.adminUsers || 0);
+
+
+        document.getElementById(
+          "normalUsers"
+        ).textContent =
+          Number(stats.normalUsers || 0);
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "ADMIN STATS ERROR:",
+          error
+        );
+
+
+        document.getElementById(
+          "totalUsers"
+        ).textContent = "-";
+
+
+        document.getElementById(
+          "totalReports"
+        ).textContent = "-";
+
+
+        document.getElementById(
+          "adminUsers"
+        ).textContent = "-";
+
+
+        document.getElementById(
+          "normalUsers"
+        ).textContent = "-";
+
+
+        showToast(
+          error.message ||
+          "Unable to load statistics.",
+          "error"
+        );
+
+      }
+
+    }
+
+
+    /* =================================
+       LOAD USERS
+    ================================= */
+
+    async function loadUsers() {
+
+      const container =
+        document.getElementById(
+          "usersContainer"
+        );
+
+
+      container.innerHTML =
+        '<div class="loading">Loading users...</div>';
+
+
+      try {
+
+        const data =
+          await adminFetch(
+            "/api/admin/users"
+          );
+
+
+        allUsers =
+          Array.isArray(data.users)
+            ? data.users
+            : [];
+
+
+        renderUsers(allUsers);
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "ADMIN USERS ERROR:",
+          error
+        );
+
+
+        container.innerHTML =
+          `
+          <div class="error">
+            ${escapeHtml(
+              error.message ||
+              "Unable to load users."
+            )}
+          </div>
+          `;
+
+      }
+
+    }
+
+
+    /* =================================
+       RENDER USERS
+    ================================= */
+
+    function renderUsers(users) {
+
+      const container =
+        document.getElementById(
+          "usersContainer"
+        );
+
+
+      if (!users.length) {
+
+        container.innerHTML =
+          `
+          <div class="empty">
+            No users found.
+          </div>
+          `;
+
+        return;
+
+      }
+
+
+      let html = `
+
+        <div class="table-container">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>Name</th>
+
+                <th>Email</th>
+
+                <th>Role</th>
+
+                <th>Company</th>
+
+                <th>Created</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+      `;
+
+
+      users.forEach(user => {
+
+        const role =
+          user.role || "user";
+
+
+        const safeRole =
+          role === "admin"
+            ? "admin"
+            : "user";
+
+
+        const formattedDate =
+          user.createdAt
+            ? new Date(
+                user.createdAt
+              ).toLocaleDateString(
+                undefined,
+                {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                }
+              )
+            : "-";
+
+
+        html += `
+
+          <tr>
+
+            <td>
+
+              <span class="user-name">
+
+                ${escapeHtml(
+                  user.name || "-"
+                )}
+
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <span class="user-email">
+
+                ${escapeHtml(
+                  user.email || "-"
+                )}
+
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <span
+                class="role ${safeRole}">
+
+                ${escapeHtml(
+                  safeRole
+                )}
+
+              </span>
+
+            </td>
+
+
+            <td>
+
+              ${escapeHtml(
+                user.company || "-"
+              )}
+
+            </td>
+
+
+            <td>
+
+              ${formattedDate}
+
+            </td>
+
+          </tr>
+
+        `;
+
+      });
+
+
+      html += `
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      `;
+
+
+      container.innerHTML =
+        html;
+
+    }
+
+
+    /* =================================
+       SEARCH USERS
+    ================================= */
+
+    function filterUsers() {
+
+      const input =
+        document.getElementById(
+          "userSearch"
+        );
+
+
+      const query =
+        input.value
+          .trim()
+          .toLowerCase();
+
+
+      if (!query) {
+
+        renderUsers(
+          allUsers
+        );
+
+        return;
+
+      }
+
+
+      const filtered =
+        allUsers.filter(user => {
+
+          const name =
+            String(
+              user.name || ""
+            ).toLowerCase();
+
+
+          const email =
+            String(
+              user.email || ""
+            ).toLowerCase();
+
+
+          const company =
+            String(
+              user.company || ""
+            ).toLowerCase();
+
+
+          const role =
+            String(
+              user.role || ""
+            ).toLowerCase();
+
+
+          return (
+            name.includes(query) ||
+            email.includes(query) ||
+            company.includes(query) ||
+            role.includes(query)
+          );
+
+        });
+
+
+      renderUsers(
+        filtered
+      );
+
+    }
+
+
+    /* =================================
+       REFRESH DASHBOARD
+    ================================= */
+
+    async function refreshDashboard() {
+
+      const button =
+        document.getElementById(
+          "refreshButton"
+        );
+
+
+      button.classList.add(
+        "loading"
+      );
+
+
+      button.textContent =
+        "Refreshing...";
+
+
+      try {
+
+        await Promise.all([
+          loadStats(),
+          loadUsers()
+        ]);
+
+
+        showToast(
+          "Dashboard refreshed successfully.",
+          "success"
+        );
+
+      }
+
+      catch (error) {
+
+        console.error(error);
+
+      }
+
+      finally {
+
+        button.classList.remove(
+          "loading"
+        );
+
+
+        button.textContent =
+          "Refresh Data";
+
+      }
+
+    }
+
+
+    /* =================================
+       DASHBOARD BUTTON
+    ================================= */
+
+    function showDashboard() {
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+    /* =================================
+       SIDEBAR MOBILE
+    ================================= */
+
+    function toggleSidebar() {
+
+      const sidebar =
+        document.getElementById(
+          "sidebar"
+        );
+
+
+      const overlay =
+        document.getElementById(
+          "sidebarOverlay"
+        );
+
+
+      sidebar.classList.toggle(
+        "open"
+      );
+
+
+      overlay.classList.toggle(
+        "active"
+      );
+
+    }
+
+
+    function closeSidebar() {
+
+      const sidebar =
+        document.getElementById(
+          "sidebar"
+        );
+
+
+      const overlay =
+        document.getElementById(
+          "sidebarOverlay"
+        );
+
+
+      sidebar.classList.remove(
+        "open"
+      );
+
+
+      overlay.classList.remove(
+        "active"
+      );
+
+    }
+
+
+    /* =================================
+       ESCAPE HTML
+    ================================= */
+
+    function escapeHtml(value) {
+
+      return String(value)
+
+        .replaceAll(
+          "&",
+          "&amp;"
+        )
+
+        .replaceAll(
+          "<",
+          "&lt;"
+        )
+
+        .replaceAll(
+          ">",
+          "&gt;"
+        )
+
+        .replaceAll(
+          '"',
+          "&quot;"
+        )
+
+        .replaceAll(
+          "'",
+          "&#039;"
+        );
+
+    }
+
+
+    /* =================================
+       LOGOUT
+    ================================= */
+
+    function logout() {
+
+      localStorage.removeItem(
+        "token"
+      );
+
+      localStorage.removeItem(
+        "user"
+      );
+
+      localStorage.removeItem(
+        "userEmail"
+      );
+
+      window.location.href =
+        "login.html";
+
+    }
+
+
+    /* =================================
+       TOAST HELPER
+    ================================= */
+
+    function showToast(
+      message,
+      type = "info"
+    ) {
+
+      /*
+        Use your existing toast.js
+        when available.
+      */
+
+      if (
+        typeof Toastify ===
+        "function"
+      ) {
+
+        Toastify({
+
+          text: message,
+
+          duration: 3000,
+
+          gravity: "top",
+
+          position: "right",
+
+          className:
+            type === "error"
+              ? "toast-error"
+              : "toast-success"
+
+        }).showToast();
+
+
+        return;
+
+      }
+
+
+      /*
+        Fallback.
+      */
+
+      console.log(
+        `[${type}] ${message}`
+      );
+
+    }
+
+
+    /* =================================
+       INITIAL LOAD
+    ================================= */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+
+        loadStats();
+
+        loadUsers();
+
+      }
+    );
+
+
+    /* =================================
+       KEYBOARD SUPPORT
+    ================================= */
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "Escape"
+        ) {
+
+          closeSidebar();
+
+        }
+
+      }
+    );
+
+  </script>
+
+
+  <script src="js/toast.js"></script>
+
+</body>
+
+</html>
+

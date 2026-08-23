@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Analyze Website | WebRank AI</title>
+
+    <link rel="stylesheet" href="Css/theme.css">
+    <link rel="stylesheet" href="Css/app.css">
+
+    <script src="js/theme.js"></script>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            transition:
+                background 0.25s ease,
+                color 0.25s ease;
+        }
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .sidebar {
+            width: 260px;
+            min-height: 100vh;
+
+            background: var(--sidebar);
+
+            padding: 30px 20px;
+
+            border-right: 1px solid var(--border);
+
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+
+            z-index: 100;
+
+            transition:
+                background 0.25s ease,
+                border-color 0.25s ease;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 40px;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            margin: 8px 0;
+        }
+
+        .menu a {
+            display: block;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            color: var(--text-secondary);
+
+            text-decoration: none;
+
+            transition:
+                background 0.25s ease,
+                color 0.25s ease,
+                transform 0.2s ease;
+        }
+
+        .menu a:hover {
+            background: var(--input-bg);
+            color: var(--text);
+            transform: translateX(3px);
+        }
+
+        .menu a.active {
+            background: var(--primary);
+            color: #000;
+            font-weight: 700;
+        }
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .container {
+            margin-left: 260px;
+
+            width: calc(100% - 260px);
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 40px;
+        }
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .card {
+            width: 100%;
+            max-width: 900px;
+
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            border-radius: 24px;
+
+            padding: 50px;
+
+            backdrop-filter: blur(20px);
+
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, 0.15);
+
+            text-align: center;
+
+            transition:
+                background 0.25s ease,
+                border-color 0.25s ease,
+                transform 0.25s ease;
+        }
+
+        /* =====================================================
+           BADGE
+        ===================================================== */
+
+        .badge {
+            display: inline-block;
+
+            padding: 8px 16px;
+
+            border-radius: 999px;
+
+            background: rgba(56, 189, 248, 0.12);
+
+            color: var(--primary);
+
+            font-size: 13px;
+            font-weight: 600;
+
+            margin-bottom: 20px;
+        }
+
+        /* =====================================================
+           TITLE
+        ===================================================== */
+
+        h1 {
+            font-size: 42px;
+
+            line-height: 1.2;
+
+            margin-bottom: 12px;
+
+            color: var(--text);
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+
+            max-width: 620px;
+
+            margin: 0 auto 32px;
+
+            line-height: 1.6;
+
+            font-size: 15px;
+        }
+
+        /* =====================================================
+           SEARCH
+        ===================================================== */
+
+        .search-box {
+            display: flex;
+
+            justify-content: center;
+
+            width: 100%;
+
+            margin-bottom: 18px;
+        }
+
+        .search-box input {
+            flex: 1;
+
+            min-width: 0;
+
+            padding: 16px 18px;
+
+            border: 1px solid var(--border);
+
+            outline: none;
+
+            border-radius: 12px 0 0 12px;
+
+            background: var(--input-bg);
+
+            color: var(--text);
+
+            font-size: 15px;
+
+            transition:
+                background 0.25s ease,
+                color 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.75;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+
+            box-shadow:
+                0 0 0 3px rgba(56, 189, 248, 0.08);
+        }
+
+        .search-box button {
+            padding: 16px 30px;
+
+            border: none;
+
+            background: var(--primary);
+
+            color: #000;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            border-radius: 0 12px 12px 0;
+
+            transition:
+                background 0.25s ease,
+                transform 0.25s ease,
+                opacity 0.25s ease;
+        }
+
+        .search-box button:hover {
+            opacity: 0.9;
+
+            transform: translateY(-1px);
+        }
+
+        .search-box button:disabled {
+            opacity: 0.6;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
+
+        .message {
+            min-height: 24px;
+
+            margin-top: 8px;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+        .message.error {
+            color: #ef4444;
+        }
+
+        .message.success {
+            color: #22c55e;
+        }
+
+        /* =====================================================
+           INFO GRID
+        ===================================================== */
+
+        .info {
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 16px;
+
+            margin-top: 30px;
+        }
+
+        .info div {
+            background: var(--input-bg);
+
+            padding: 20px 15px;
+
+            border-radius: 16px;
+
+            border: 1px solid var(--border);
+
+            transition:
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                background 0.25s ease;
+        }
+
+        .info div:hover {
+            transform: translateY(-4px);
+
+            border-color: var(--primary);
+        }
+
+        .info h3 {
+            color: var(--primary);
+
+            margin-bottom: 7px;
+
+            font-size: 15px;
+        }
+
+        .info p {
+            color: var(--text-secondary);
+
+            font-size: 12px;
+
+            line-height: 1.4;
+        }
+
+        /* =====================================================
+           LOADING
+        ===================================================== */
+
+        .loading-section {
+            display: none;
+
+            margin-top: 38px;
+
+            text-align: left;
+        }
+
+        .loading-section.show {
+            display: block;
+        }
+
+        .loading-title {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 10px;
+        }
+
+        .loading-title h3 {
+            font-size: 15px;
+
+            color: var(--text);
+        }
+
+        #progressPercent {
+            color: var(--primary);
+
+            font-weight: 700;
+
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            width: 100%;
+
+            height: 10px;
+
+            background: var(--input-bg);
+
+            border: 1px solid var(--border);
+
+            border-radius: 999px;
+
+            overflow: hidden;
+        }
+
+        .progress {
+            width: 0%;
+
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #22c55e,
+                    var(--primary)
+                );
+
+            border-radius: 999px;
+
+            transition:
+                width 0.25s ease;
+        }
+
+        .progress.indeterminate {
+            width: 38%;
+            animation: analysis-progress 1.2s ease-in-out infinite;
+        }
+
+        @keyframes analysis-progress {
+            0% { transform: translateX(-110%); }
+            100% { transform: translateX(290%); }
+        }
+
+        .scan-dots {
+            display: flex;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            margin-top: 18px;
+        }
+
+        .scan-dots span {
+            width: 10px;
+
+            height: 10px;
+
+            border-radius: 50%;
+
+            background: var(--primary);
+
+            animation: pulse 1s infinite;
+        }
+
+        .scan-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .scan-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.3;
+
+                transform: scale(0.8);
+            }
+
+            50% {
+                opacity: 1;
+
+                transform: scale(1.2);
+            }
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1000px) {
+
+            .sidebar {
+                width: 220px;
+            }
+
+            .container {
+                margin-left: 220px;
+
+                width: calc(100% - 220px);
+
+                padding: 25px;
+            }
+
+            .card {
+                padding: 40px 30px;
+            }
+
+            .info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            body {
+                display: block;
+            }
+
+            .sidebar {
+                position: relative;
+
+                width: 100%;
+
+                min-height: auto;
+
+                padding: 20px;
+
+                border-right: none;
+
+                border-bottom: 1px solid var(--border);
+            }
+
+            .logo {
+                margin-bottom: 20px;
+            }
+
+            .menu {
+                display: flex;
+
+                gap: 8px;
+
+                flex-wrap: wrap;
+            }
+
+            .menu li {
+                margin: 0;
+            }
+
+            .menu a {
+                padding: 8px 10px;
+
+                font-size: 13px;
+            }
+
+            .container {
+                margin-left: 0;
+
+                width: 100%;
+
+                min-height: calc(100vh - 120px);
+
+                padding: 20px;
+            }
+
+            .card {
+                padding: 30px 20px;
+
+                border-radius: 20px;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            .search-box {
+                flex-direction: column;
+
+                gap: 10px;
+            }
+
+            .search-box input,
+            .search-box button {
+                width: 100%;
+
+                border-radius: 12px;
+            }
+
+            .info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .container {
+                padding: 15px;
+            }
+
+            .card {
+                padding: 25px 16px;
+            }
+
+            h1 {
+                font-size: 27px;
+            }
+
+            .info {
+                grid-template-columns: 1fr;
+            }
+
+            .menu {
+                max-height: 180px;
+
+                overflow-y: auto;
+            }
+
+            .loading-title h3 {
+                font-size: 13px;
+            }
+
+            #progressPercent {
+                font-size: 13px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="Css/app.css">
+</head>
+
+
+<body>
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            WebRank AI
+        </div>
+
+        <ul class="menu">
+
+            <li>
+                <a href="index.html">
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="analyze.html" class="active">
+                    Analyze Website
+                </a>
+            </li>
+
+            <li>
+                <a href="results.html">
+                    Reports
+                </a>
+            </li>
+
+            <li>
+                <a href="compare.html">
+                    Compare Sites
+                </a>
+            </li>
+
+            <li>
+                <a href="saved-reports.html">
+                    Saved Reports
+                </a>
+            </li>
+
+            <li>
+                <a href="profile.html">
+                    Profile
+                </a>
+            </li>
+
+            <li>
+                <a href="settings.html">
+                    Settings
+                </a>
+            </li>
+
+            <li>
+                <a href="login.html" id="logoutLink">
+                    Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="container">
+
+        <section class="card">
+
+            <div class="badge">
+                🚀 AI Website Analyzer
+            </div>
+
+            <h1>
+                Analyze Your Website
+            </h1>
+
+            <p class="subtitle">
+                Get real Lighthouse insights on
+                Performance, SEO, Accessibility,
+                Best Practices and PWA.
+            </p>
+
+
+            <!-- =================================================
+                 SEARCH
+            ================================================== -->
+
+            <div class="search-box">
+
+                <input
+                    type="url"
+                    id="urlInput"
+                    placeholder="https://example.com"
+                    autocomplete="url"
+                >
+
+                <button
+                    type="button"
+                    id="analyzeButton"
+                >
+                    Analyze
+                </button>
+
+            </div>
+
+
+            <div
+                id="message"
+                class="message"
+                aria-live="polite"
+            ></div>
+
+
+            <!-- =================================================
+                 INFO
+            ================================================== -->
+
+            <div class="info">
+
+                <div>
+                    <h3>
+                        Performance
+                    </h3>
+
+                    <p>
+                        Speed Score
+                    </p>
+                </div>
+
+                <div>
+                    <h3>
+                        SEO
+                    </h3>
+
+                    <p>
+                        Search Ranking
+                    </p>
+                </div>
+
+                <div>
+                    <h3>
+                        Accessibility
+                    </h3>
+
+                    <p>
+                        User Friendly
+                    </p>
+                </div>
+
+                <div>
+                    <h3>
+                        PWA
+                    </h3>
+
+                    <p>
+                        Mobile Ready
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 LOADING
+            ================================================== -->
+
+            <div
+                class="loading-section"
+                id="loadingSection"
+            >
+
+                <div class="loading-title">
+
+                    <h3 id="status">
+                        Initializing Scan...
+                    </h3>
+
+                    <span id="progressPercent">
+                        0%
+                    </span>
+
+                </div>
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress"
+                        id="progress"
+                    ></div>
+
+                </div>
+
+                <div class="scan-dots">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         API
+    ====================================================== -->
+
+    <script src="js/api.js"></script>
+    <script src="js/sidebar.js" defer></script>
+
+
+    <script>
+
+        /* =====================================================
+           LOGIN CHECK
+        ===================================================== */
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+
+            window.location.href = "login.html";
+
+        }
+
+
+        /* =====================================================
+           ELEMENTS
+        ===================================================== */
+
+        const urlInput =
+            document.getElementById("urlInput");
+
+        const analyzeButton =
+            document.getElementById("analyzeButton");
+
+        const loadingSection =
+            document.getElementById("loadingSection");
+
+        const progress =
+            document.getElementById("progress");
+
+        const progressPercent =
+            document.getElementById("progressPercent");
+
+        const status =
+            document.getElementById("status");
+
+        const message =
+            document.getElementById("message");
+
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
+
+        function showMessage(text, type = "") {
+
+            message.textContent = text;
+
+            message.className =
+                "message" + (type ? " " + type : "");
+        }
+
+
+        /* =====================================================
+           PROGRESS
+        ===================================================== */
+
+        function setProgress(value, text) {
+
+            const numericValue =
+                Number(value);
+
+            const safeValue =
+                Number.isFinite(numericValue)
+                    ? Math.max(
+                        0,
+                        Math.min(
+                            100,
+                            Math.round(numericValue)
+                        )
+                    )
+                    : 0;
+
+            progress.style.width =
+                safeValue + "%";
+
+            progress.classList.toggle(
+                "indeterminate",
+                safeValue > 0 && safeValue < 100
+            );
+
+            progressPercent.textContent =
+                safeValue + "%";
+
+            if (text) {
+
+                status.textContent = text;
+
+            }
+        }
+
+
+        /* =====================================================
+           URL NORMALIZATION
+        ===================================================== */
+
+        function normalizeUrl(value) {
+
+            let url =
+                value.trim();
+
+            if (!url) {
+                return "";
+            }
+
+            if (
+                !url.startsWith("http://") &&
+                !url.startsWith("https://")
+            ) {
+
+                url =
+                    "https://" + url;
+            }
+
+            return url;
+        }
+
+
+        /* =====================================================
+           VALIDATE URL
+        ===================================================== */
+
+        function isValidWebsiteUrl(value) {
+
+            try {
+
+                const parsed =
+                    new URL(value);
+
+                return (
+                    parsed.protocol === "http:" ||
+                    parsed.protocol === "https:"
+                );
+
+            } catch {
+
+                return false;
+
+            }
+        }
+
+
+        /* =====================================================
+           ANALYZE WEBSITE
+        ===================================================== */
+
+        async function analyzeWebsite() {
+
+            const currentToken =
+                localStorage.getItem("token");
+
+
+            /* -------------------------------------------------
+               LOGIN VALIDATION
+            ------------------------------------------------- */
+
+            if (!currentToken) {
+
+                showMessage(
+                    "Please login first.",
+                    "error"
+                );
+
+                window.location.href =
+                    "login.html";
+
+                return;
+            }
+
+
+            /* -------------------------------------------------
+               GET URL
+            ------------------------------------------------- */
+
+            const url =
+                normalizeUrl(
+                    urlInput.value
+                );
+
+
+            if (!url) {
+
+                showMessage(
+                    "Please enter a website URL.",
+                    "error"
+                );
+
+                urlInput.focus();
+
+                return;
+            }
+
+
+            /* -------------------------------------------------
+               URL VALIDATION
+            ------------------------------------------------- */
+
+            if (!isValidWebsiteUrl(url)) {
+
+                showMessage(
+                    "Please enter a valid website URL.",
+                    "error"
+                );
+
+                urlInput.focus();
+
+                return;
+            }
+
+
+            /* -------------------------------------------------
+               UI LOADING STATE
+            ------------------------------------------------- */
+
+            analyzeButton.disabled =
+                true;
+
+            analyzeButton.textContent =
+                "Analyzing...";
+
+            urlInput.disabled =
+                true;
+
+            loadingSection.classList.add(
+                "show"
+            );
+
+            showMessage(
+                "Website analysis started..."
+            );
+
+            setProgress(
+                10,
+                "Connecting to website..."
+            );
+
+
+            /* -------------------------------------------------
+               API REQUEST
+            ------------------------------------------------- */
+
+            try {
+
+                if (
+                    typeof apiFetch !==
+                    "function"
+                ) {
+
+                    throw new Error(
+                        "API configuration is missing. Check js/api.js."
+                    );
+
+                }
+
+
+                const response =
+                    await apiFetch(
+                        "/api/analyze",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+
+                                "Authorization":
+                                    "Bearer " +
+                                    currentToken
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    url: url
+                                })
+                        }
+                    );
+
+
+                /* -------------------------------------------------
+                   READ RESPONSE
+                ------------------------------------------------- */
+
+                let data = {};
+
+                const contentType =
+                    response.headers.get(
+                        "content-type"
+                    ) || "";
+
+
+                if (
+                    contentType.includes(
+                        "application/json"
+                    )
+                ) {
+
+                    data =
+                        await response.json();
+
+                } else {
+
+                    const text =
+                        await response.text();
+
+                    data = {
+                        message: text
+                    };
+
+                }
+
+
+                /* -------------------------------------------------
+                   API ERROR
+                ------------------------------------------------- */
+
+                if (!response.ok) {
+
+                    if (
+                        response.status === 401 ||
+                        response.status === 403
+                    ) {
+
+                        localStorage.removeItem(
+                            "token"
+                        );
+
+                        localStorage.removeItem(
+                            "user"
+                        );
+
+                        throw new Error(
+                            "Your session has expired. Please login again."
+                        );
+
+                    }
+
+
+                    throw new Error(
+                        data.message ||
+                        data.error ||
+                        "Unable to analyze the website."
+                    );
+                }
+
+
+                /* -------------------------------------------------
+                   VALIDATE REPORT
+                ------------------------------------------------- */
+
+                const report =
+                    data.report ||
+                    data.data ||
+                    data.result;
+
+
+                if (!report) {
+
+                    throw new Error(
+                        "The server returned an invalid analysis report."
+                    );
+                }
+
+
+                /*
+                 * Accept different backend ID formats.
+                 */
+
+                const reportId =
+                    report._id ||
+                    report.id ||
+                    data.reportId ||
+                    data.id;
+
+
+                if (!reportId) {
+
+                    throw new Error(
+                        "The server returned a report without an ID."
+                    );
+                }
+
+
+                /* -------------------------------------------------
+                   COMPLETE PROGRESS
+                ------------------------------------------------- */
+
+                setProgress(
+                    100,
+                    "Analysis completed!"
+                );
+
+
+                /* -------------------------------------------------
+                   SAVE REPORT ID
+                ------------------------------------------------- */
+
+                localStorage.setItem(
+                    "reportId",
+                    String(reportId)
+                );
+
+
+                /* -------------------------------------------------
+                   SAVE FULL REPORT
+                ------------------------------------------------- */
+
+                localStorage.setItem(
+                    "latestReport",
+                    JSON.stringify(report)
+                );
+
+
+                /*
+                 * Also keep the complete API response.
+                 * Useful for results.html if it needs
+                 * metadata returned by the server.
+                 */
+
+                localStorage.setItem(
+                    "latestAnalysisResponse",
+                    JSON.stringify(data)
+                );
+
+
+                /* -------------------------------------------------
+                   SAVE URL
+                ------------------------------------------------- */
+
+                localStorage.setItem(
+                    "latestAnalyzedUrl",
+                    url
+                );
+
+
+                /* -------------------------------------------------
+                   SUCCESS MESSAGE
+                ------------------------------------------------- */
+
+                showMessage(
+                    "Analysis completed successfully!",
+                    "success"
+                );
+
+
+                /* -------------------------------------------------
+                   REDIRECT
+                ------------------------------------------------- */
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        "results.html";
+
+                }, 700);
+
+            }
+
+
+            /* -------------------------------------------------
+               ERROR
+            ------------------------------------------------- */
+
+            catch (error) {
+
+                console.error(
+                    "ANALYZE FRONTEND ERROR:",
+                    error
+                );
+
+
+                setProgress(
+                    0,
+                    "Analysis failed"
+                );
+
+
+                showMessage(
+                    error.message ||
+                    "Unable to analyze the website.",
+                    "error"
+                );
+
+
+                analyzeButton.disabled =
+                    false;
+
+                analyzeButton.textContent =
+                    "Analyze";
+
+                urlInput.disabled =
+                    false;
+
+            }
+
+
+            finally {
+
+                /*
+                 * If the page is not redirecting,
+                 * restore the input/button state.
+                 */
+
+                if (
+                    !message.classList.contains(
+                        "success"
+                    )
+                ) {
+
+                    analyzeButton.disabled =
+                        false;
+
+                    analyzeButton.textContent =
+                        "Analyze";
+
+                    urlInput.disabled =
+                        false;
+                }
+
+            }
+
+        }
+
+
+        /* =====================================================
+           ANALYZE BUTTON
+        ===================================================== */
+
+        analyzeButton.addEventListener(
+            "click",
+            analyzeWebsite
+        );
+
+
+        /* =====================================================
+           ENTER KEY
+        ===================================================== */
+
+        urlInput.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    event.preventDefault();
+
+                    analyzeWebsite();
+
+                }
+
+            }
+        );
+
+
+        /* =====================================================
+           LOGOUT
+        ===================================================== */
+
+        document
+            .getElementById("logoutLink")
+            .addEventListener(
+                "click",
+                function () {
+
+                    localStorage.removeItem(
+                        "token"
+                    );
+
+                    localStorage.removeItem(
+                        "user"
+                    );
+
+                    localStorage.removeItem(
+                        "reportId"
+                    );
+
+                    localStorage.removeItem(
+                        "latestReport"
+                    );
+
+                    localStorage.removeItem(
+                        "latestAnalysisResponse"
+                    );
+
+                    localStorage.removeItem(
+                        "latestAnalyzedUrl"
+                    );
+
+                }
+            );
+
+
+        /* =====================================================
+           INITIAL STATE
+        ===================================================== */
+
+        setProgress(
+            0,
+            "Ready to scan"
+        );
+
+    </script>
+
+</body>
+
+</html>

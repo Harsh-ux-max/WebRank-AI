@@ -1,0 +1,2353 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Profile | WebRank AI</title>
+
+  <link rel="stylesheet" href="Css/app.css" />
+
+  <!-- Theme -->
+  <script src="js/theme.js"></script>
+
+  <style>
+    /* =========================================================
+       THEME VARIABLES
+    ========================================================= */
+
+    :root {
+      --bg: #0f172a;
+      --sidebar: #111827;
+      --card: #1e293b;
+      --text: #ffffff;
+      --text-secondary: #94a3b8;
+      --primary: #38bdf8;
+      --input-bg: #0f172a;
+      --border: rgba(255, 255, 255, 0.08);
+
+      --success: #0cce6b;
+      --danger: #ff4e42;
+
+      --glow: rgba(56, 189, 248, 0.15);
+      --soft-primary: rgba(56, 189, 248, 0.08);
+      --soft-success: rgba(12, 206, 107, 0.10);
+      --soft-danger: rgba(255, 78, 66, 0.10);
+
+      --shadow: rgba(0, 0, 0, 0.18);
+    }
+
+    /* LIGHT THEME */
+
+    .light-theme {
+      --bg: #f8fafc;
+      --sidebar: #ffffff;
+      --card: #ffffff;
+      --text: #111827;
+      --text-secondary: #475569;
+      --primary: #2563eb;
+      --input-bg: #ffffff;
+      --border: rgba(15, 23, 42, 0.12);
+
+      --success: #16a34a;
+      --danger: #dc2626;
+
+      --glow: rgba(37, 99, 235, 0.12);
+      --soft-primary: rgba(37, 99, 235, 0.07);
+      --soft-success: rgba(22, 163, 74, 0.09);
+      --soft-danger: rgba(220, 38, 38, 0.09);
+
+      --shadow: rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Arial, sans-serif;
+    }
+
+    
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 85% 5%, rgba(56, 189, 248, 0.08), transparent 30%),
+        radial-gradient(circle at 15% 90%, rgba(14, 165, 233, 0.05), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      width: 650px;
+      height: 650px;
+      background: radial-gradient(
+        circle,
+        rgba(56, 189, 248, 0.14),
+        transparent 65%
+      );
+      filter: blur(100px);
+      top: -220px;
+      right: -200px;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* =========================
+       SIDEBAR
+    ========================= */
+
+    .sidebar {
+      width: 260px;
+      min-width: 260px;
+      min-height: 100vh;
+      padding: 28px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 50;
+      backdrop-filter: blur(20px);
+
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      transition:
+        background 0.25s ease,
+        border-color 0.25s ease;
+      display: flex;
+      flex-direction: column;
+
+      
+    }
+
+
+    .logo {
+      font-size: 23px;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: -0.5px;
+      padding: 0 12px;
+      margin-bottom: 35px;
+    }
+
+    .logo span {
+      color: #fff;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu li {
+      margin: 6px 0;
+    }
+
+    .menu a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 11px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .menu a:hover {
+      background: rgba(56, 189, 248, 0.08);
+      color:var(--text);
+      transform: translateX(2px);
+    }
+
+    .menu a.active {
+      background: var(--blue);
+      color: var(--text-secondary);
+      font-weight: 700;
+      box-shadow: 0 8px 25px rgba(56, 189, 248, 0.18);
+    }
+
+    /* =========================
+       PAGE
+    ========================= */
+
+    .page {
+      flex: 1;
+      min-width: 0;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1450px;
+      margin: 0 auto;
+      padding: 42px;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .header {
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 38px;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    /* =========================
+       PROFILE GRID
+    ========================= */
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+      gap: 25px;
+      align-items: start;
+    }
+
+    /* =========================
+       CARD
+    ========================= */
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 26px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    .card:hover {
+      border-color: rgba(56, 189, 248, 0.12);
+    }
+
+    /* =========================
+       PROFILE CARD
+    ========================= */
+
+    .profile-card {
+      text-align: center;
+      position: sticky;
+      top: 30px;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 115px;
+      margin: 0 auto 18px;
+    }
+
+    .avatar {
+      width: 115px;
+      height: 115px;
+      border-radius: 50%;
+      background: linear-gradient(
+        135deg,
+        var(--blue),
+        var(--blue-dark)
+      );
+      color: #020617;
+      font-size: 42px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 0 0 5px rgba(56, 189, 248, 0.05),
+        0 0 45px rgba(56, 189, 248, 0.25);
+      overflow: hidden;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .online-dot {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--success);
+      border: 3px solid var(--sidebar);
+      right: 2px;
+      bottom: 5px;
+    }
+
+    .upload-btn {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 9px 16px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 10px;
+      background: rgba(56, 189, 248, 0.08);
+      color: var(--blue);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .upload-btn:hover {
+      background: rgba(56, 189, 248, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .profile-card h2 {
+      font-size: 22px;
+      margin-bottom: 5px;
+    }
+
+    .profile-card .email {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 17px;
+      word-break: break-word;
+    }
+
+    /* =========================
+       PLAN
+    ========================= */
+
+    .plan {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 15px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* =========================
+       STATS
+    ========================= */
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 23px;
+    }
+
+    .stat {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 15px 10px;
+      transition: 0.2s;
+    }
+
+    .stat:hover {
+      background: var(--card-hover);
+      transform: translateY(-2px);
+    }
+
+    .stat h3 {
+      color: var(--blue);
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+
+    .stat p {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* =========================
+       ACCOUNT STATUS
+    ========================= */
+
+    .status-card {
+      margin-top: 20px;
+      padding: 17px;
+      border-radius: 15px;
+      background: rgba(34, 197, 94, 0.04);
+      border: 1px solid rgba(34, 197, 94, 0.12);
+      text-align: left;
+    }
+
+    .status-card h3 {
+      font-size: 14px;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 7px 0;
+      font-size: 12px;
+    }
+
+    .status-row span:first-child {
+      color: var(--muted);
+    }
+
+    .status-active {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    /* =========================
+       RIGHT CONTENT
+    ========================= */
+
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .section-title {
+      font-size: 19px;
+      margin-bottom: 20px;
+    }
+
+    .section-description {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: -10px;
+      margin-bottom: 20px;
+    }
+
+    /* =========================
+       FORM
+    ========================= */
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .form-group {
+      margin-bottom: 17px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 12px;
+      border:2px solid var(--border);
+      background:var(--input-bg);
+      color: var(--text);
+      outline: none;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+
+    .form-group input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .form-group input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.08);
+    }
+
+    .form-group input:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* =========================
+       BUTTONS
+    ========================= */
+
+    .btn-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 5px;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border: 2px solid var(--border);
+      border-radius: 11px;
+      background: var(--blue);
+      color:var(--text);
+      font-weight: 750;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #7dd3fc;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.18);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      padding: 12px 20px;
+      border: 2px solid var(--border);
+      border-radius: 11px;
+      background:var(--blue);
+      color:var(--text);
+      font-weight: 650;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #7dd3fc;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.18);
+      
+    }
+
+    /* =========================
+       PASSWORD
+    ========================= */
+
+    .password-section {
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      padding-top: 25px;
+      margin-top: 25px;
+    }
+
+    .password-strength {
+      height: 5px;
+      width: 100%;
+      background: #1e293b;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 8px;
+      display: none;
+    }
+
+    .password-strength-bar {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      transition: all 0.25s ease;
+    }
+
+    .password-help {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 7px;
+    }
+
+    /* =========================
+       DANGER ZONE
+    ========================= */
+
+    .danger-zone {
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      background: rgba(239, 68, 68, 0.035);
+    }
+
+    .danger-zone h2 {
+      color: #f87171;
+      font-size: 18px;
+      margin-bottom: 7px;
+    }
+
+    .danger-zone p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .delete-btn {
+      margin-top: 16px;
+      padding: 11px 18px;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 10px;
+      background: rgba(239, 68, 68, 0.1);
+      color: #f87171;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .delete-btn:hover {
+      background: var(--red);
+      color:black;
+      transform: translateY(-2px);
+    }
+
+    /* =========================
+       LOADING
+    ========================= */
+
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 15px;
+      height: 15px;
+      border: 2px solid rgba(0, 0, 0, 0.2);
+      border-top-color: #000;
+      border-radius: 50%;
+      display: inline-block;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 7px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    .toast {
+      position: fixed;
+      right: 25px;
+      bottom: 25px;
+      min-width: 280px;
+      max-width: 380px;
+      padding: 14px 17px;
+      border-radius: 13px;
+      background: #111827;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      z-index: 9999;
+      transform: translateY(30px);
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.3s;
+      font-size: 13px;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      border-color: rgba(34, 197, 94, 0.35);
+    }
+
+    .toast.error {
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    .footer {
+      text-align: center;
+      padding: 30px 20px;
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 1100px) {
+      .container {
+        padding: 30px;
+      }
+
+      .profile-grid {
+        grid-template-columns: 300px 1fr;
+      }
+    }
+
+    @media (max-width: 900px) {
+      body {
+        display: block;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .profile-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-card {
+        position: static;
+      }
+
+      .container {
+        padding: 25px 18px;
+      }
+
+      .header h1 {
+        font-size: 30px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .form-group.full {
+        grid-column: auto;
+      }
+
+      .card {
+        padding: 20px;
+        border-radius: 18px;
+      }
+
+      .btn-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn,
+      .btn-secondary {
+        width: 100%;
+      }
+
+      .toast {
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+        min-width: auto;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="Css/app.css" />
+</head>
+
+<body>
+
+  <!-- =========================
+       SIDEBAR
+  ========================== -->
+
+  <aside class="sidebar">
+
+    <div class="logo">
+      WebRank <span>AI</span>
+    </div>
+    <ul class="menu">
+
+      <li>
+        <a href="index.html">
+          
+          <span>Home</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="dashboard.html">
+          
+          <span>Dashboard</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="analyze.html">
+          
+          <span>Analyze Website</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="results.html">
+          
+          <span>Reports</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="compare.html">
+          
+          <span>Compare Sites</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="saved-reports.html">
+          
+          <span>Saved Reports</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="profile.html" class="active">
+          
+          <span>Profile</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="settings.html">
+          
+          <span>Settings</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="#" onclick="logout(event)">
+          
+          <span>Logout</span>
+        </a>
+      </li>
+
+    </ul>
+
+  </aside>
+
+
+  <!-- =========================
+       MAIN PAGE
+  ========================== -->
+
+  <main class="page">
+
+    <div class="container">
+
+      <!-- HEADER -->
+
+      <header class="header">
+
+        <h1>My Profile</h1>
+
+        <p>
+          Manage your WebRank AI account, profile information and security.
+        </p>
+
+      </header>
+
+
+      <!-- PROFILE GRID -->
+
+      <div class="profile-grid">
+
+        <!-- =========================
+             LEFT PROFILE CARD
+        ========================== -->
+
+        <section class="card profile-card">
+
+          <div class="avatar-wrapper">
+
+            <div class="avatar" id="avatar">
+              H
+            </div>
+
+            <div class="online-dot"></div>
+
+          </div>
+
+          <input
+            type="file"
+            id="photoInput"
+            accept="image/png,image/jpeg,image/webp"
+            hidden
+          />
+
+          <button type="button" class="upload-btn" disabled title="Photo uploads are not available">
+            Photo Upload Unavailable
+          </button>
+
+          <h2 id="profileName">
+            User
+          </h2>
+
+          <p class="email" id="profileEmail">
+            Email unavailable
+          </p>
+
+          <div class="plan">
+            ✦ <span id="planName">Plan unavailable</span>
+          </div>
+
+
+          <!-- STATS -->
+
+          <div class="stats">
+
+            <div class="stat">
+              <h3 id="auditCount">0</h3>
+              <p>Audits</p>
+            </div>
+
+            <div class="stat">
+              <h3 id="avgScore">0</h3>
+              <p>Avg Score</p>
+            </div>
+
+            <div class="stat">
+              <h3 id="reportCount">0</h3>
+              <p>Reports</p>
+            </div>
+
+            <div class="stat">
+              <h3 id="bestRank">-</h3>
+              <p>Best Grade</p>
+            </div>
+
+          </div>
+
+
+          <!-- ACCOUNT STATUS -->
+
+          <div class="status-card">
+
+            <h3>Account Status</h3>
+
+            <div class="status-row">
+              <span>Status</span>
+              <span class="status-active">
+                ● Active
+              </span>
+            </div>
+
+            <div class="status-row">
+              <span>Plan</span>
+              <span id="statusPlan">
+                Pro
+              </span>
+            </div>
+
+            <div class="status-row">
+              <span>Member since</span>
+              <span id="memberSince">
+                —
+              </span>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             RIGHT COLUMN
+        ========================== -->
+
+        <div class="right-column">
+
+
+          <!-- EDIT PROFILE -->
+
+          <section class="card">
+
+            <h2 class="section-title">
+              Edit Profile
+            </h2>
+
+            <p class="section-description">
+              Update your personal information and account details.
+            </p>
+
+
+            <form id="profileForm">
+
+              <div class="form-grid">
+
+                <div class="form-group">
+
+                  <label for="name">
+                    Full Name
+                  </label>
+
+                
+                  <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter your full name"
+                    autocomplete="name"
+                    required
+                  />
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="email">
+                    Email
+                  </label>
+
+                  <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    disabled
+                  />
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="company">
+                    Company
+                  </label>
+
+                  <input
+                    type="text"
+                    id="company"
+                    placeholder="Your company"
+                    autocomplete="organization"
+                  />
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="website">
+                    Website
+                  </label>
+
+                  <input
+                    type="url"
+                    id="website"
+                    placeholder="https://yourwebsite.com"
+                    autocomplete="url"
+                  />
+
+                </div>
+
+              </div>
+
+
+              <div class="btn-row">
+
+                <button
+                  type="submit"
+                  class="btn"
+                  id="saveProfileBtn"
+                >
+                  Save Changes
+                </button>
+
+                <button
+                  type="button"
+                  class="btn-secondary"
+                  onclick="resetProfile()"
+                >
+                  Reset
+                </button>
+
+              </div>
+
+            </form>
+
+          </section>
+
+
+          <!-- =========================
+               CHANGE PASSWORD
+          ========================== -->
+
+          <section class="card">
+
+            <h2 class="section-title">
+              Change Password
+            </h2>
+
+            <p class="section-description">
+              Keep your account secure by using a strong password.
+            </p>
+
+
+            <form id="passwordForm">
+
+              <div class="form-grid">
+
+                <div class="form-group full">
+
+                  <label for="currentPassword">
+                    Current Password
+                  </label>
+
+                  <input
+                    type="password"
+                    id="currentPassword"
+                    placeholder="Enter current password"
+                    autocomplete="current-password"
+                  />
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="newPassword">
+                    New Password
+                  </label>
+
+                  <input
+                    type="password"
+                    id="newPassword"
+                    placeholder="Enter new password"
+                    autocomplete="new-password"
+                  />
+
+                  <div
+                    class="password-strength"
+                    id="passwordStrength"
+                  >
+                    <div
+                      class="password-strength-bar"
+                      id="passwordStrengthBar"
+                    ></div>
+                  </div>
+
+                  <p class="password-help">
+                    Use at least 8 characters with letters and numbers.
+                  </p>
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="confirmPassword">
+                    Confirm Password
+                  </label>
+
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirm new password"
+                    autocomplete="new-password"
+                  />
+
+                </div>
+
+              </div>
+
+
+              <div class="btn-row">
+
+                <button
+                  type="submit"
+                  class="btn"
+                  id="passwordBtn"
+                >
+                  Update Password
+                </button>
+
+              </div>
+
+            </form>
+
+          </section>
+
+
+          <!-- =========================
+               DANGER ZONE
+          ========================== -->
+
+          <section class="card danger-zone">
+
+            <h2>
+              Danger Zone
+            </h2>
+
+            <p>
+              Permanently delete your WebRank AI account and associated
+              account data. This action cannot be undone.
+            </p>
+
+            <button
+              type="button"
+              class="delete-btn"
+              onclick="deleteAccount()"
+            >
+              Delete Account
+            </button>
+
+          </section>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+      © 2026 WebRank AI • Profile Settings
+    </footer>
+
+  </main>
+
+
+  <!-- TOAST -->
+
+  <div
+    id="toast"
+    class="toast"
+  ></div>
+
+
+  <!-- API -->
+
+  <script src="js/api.js"></script>
+  <script src="js/sidebar.js" defer></script>
+
+  <script>
+
+    /* =====================================================
+       AUTH
+    ===================================================== */
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      window.location.href = "login.html";
+    }
+
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
+
+    const profileName = document.getElementById("profileName");
+    const profileEmail = document.getElementById("profileEmail");
+
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const companyInput = document.getElementById("company");
+    const websiteInput = document.getElementById("website");
+
+    const avatar = document.getElementById("avatar");
+
+    let originalProfile = null;
+
+
+    /* =====================================================
+       TOAST
+    ===================================================== */
+
+    function showToast(message, type = "success") {
+
+      const toast = document.getElementById("toast");
+
+      toast.textContent = message;
+
+      toast.className = "toast " + type + " show";
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+
+    }
+
+
+    /* =====================================================
+       LOAD PROFILE
+    ===================================================== */
+
+    async function loadProfile() {
+
+      try {
+
+        const response = await apiFetch(
+          "/api/profile",
+          {
+            method: "GET",
+            headers: {
+              Authorization: "Bearer " + token
+            }
+          }
+        );
+
+        if (response.status === 401) {
+
+          localStorage.removeItem("token");
+
+          window.location.href = "login.html";
+
+          return;
+        }
+
+
+        const data = await response.json();
+
+
+        if (!data.success) {
+
+          showToast(
+            data.message || "Unable to load profile.",
+            "error"
+          );
+
+          return;
+        }
+
+
+        const user = data.user || {};
+
+        originalProfile = {
+          name: user.name || "",
+          email: user.email || "",
+          company: user.company || "",
+          website: user.website || ""
+        };
+
+
+        /* PROFILE */
+
+        const userName =
+          user.name ||
+          "User";
+
+        const userEmail =
+          user.email ||
+          "Email unavailable";
+
+
+        profileName.textContent = userName;
+
+        profileEmail.textContent = userEmail;
+
+
+        /* FORM */
+
+        nameInput.value = userName;
+
+        emailInput.value = userEmail;
+
+        companyInput.value =
+          user.company || "";
+
+        websiteInput.value =
+          user.website || "";
+
+
+        /* AVATAR */
+
+        avatar.textContent =
+          userName
+            .trim()
+            .charAt(0)
+            .toUpperCase() || "U";
+
+
+        /* MEMBER DATE */
+
+        if (user.createdAt) {
+
+          document.getElementById(
+            "memberSince"
+          ).textContent =
+            new Date(
+              user.createdAt
+            ).toLocaleDateString(
+              undefined,
+              {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+              }
+            );
+
+        }
+
+
+        /* PLAN */
+
+        if (user.plan) {
+
+          document.getElementById(
+            "planName"
+          ).textContent =
+            user.plan;
+
+          document.getElementById(
+            "statusPlan"
+          ).textContent =
+            user.plan;
+
+        }
+
+
+      } catch (error) {
+
+        console.error(
+          "PROFILE LOAD ERROR:",
+          error
+        );
+
+        showToast(
+          "Unable to connect to the server.",
+          "error"
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       SAVE PROFILE
+    ===================================================== */
+
+    document
+      .getElementById("profileForm")
+      .addEventListener(
+        "submit",
+        async function (event) {
+
+          event.preventDefault();
+
+
+          const name =
+            nameInput.value.trim();
+
+          const company =
+            companyInput.value.trim();
+
+          const website =
+            websiteInput.value.trim();
+
+
+          if (!name) {
+
+            showToast(
+              "Please enter your name.",
+              "error"
+            );
+
+            return;
+          }
+
+
+          const button =
+            document.getElementById(
+              "saveProfileBtn"
+            );
+
+
+          button.disabled = true;
+
+          button.innerHTML =
+            '<span class="spinner"></span>Saving...';
+
+
+          try {
+
+            const response =
+              await apiFetch(
+                "/api/profile",
+                {
+                  method: "PUT",
+
+                  headers: {
+                    "Content-Type":
+                      "application/json",
+
+                    Authorization:
+                      "Bearer " + token
+                  },
+
+                  body: JSON.stringify({
+                    name,
+                    company,
+                    website
+                  })
+                }
+              );
+
+
+            if (response.status === 401) {
+
+              localStorage.removeItem(
+                "token"
+              );
+
+              window.location.href =
+                "login.html";
+
+              return;
+            }
+
+
+            const data =
+              await response.json();
+
+
+            if (data.success) {
+
+              profileName.textContent =
+                name;
+
+              avatar.textContent =
+                name
+                  .charAt(0)
+                  .toUpperCase();
+
+
+              originalProfile = {
+                name,
+                email:
+                  emailInput.value,
+                company,
+                website
+              };
+
+
+              showToast(
+                "Profile updated successfully."
+              );
+
+            } else {
+
+              showToast(
+                data.message ||
+                  "Unable to update profile.",
+                "error"
+              );
+
+            }
+
+
+          } catch (error) {
+
+            console.error(
+              "PROFILE UPDATE ERROR:",
+              error
+            );
+
+            showToast(
+              "Something went wrong while updating your profile.",
+              "error"
+            );
+
+          } finally {
+
+            button.disabled = false;
+
+            button.textContent =
+              "Save Changes";
+
+          }
+
+        }
+      );
+
+
+    /* =====================================================
+       RESET PROFILE
+    ===================================================== */
+
+    function resetProfile() {
+
+      if (!originalProfile) {
+        return;
+      }
+
+
+      nameInput.value =
+        originalProfile.name;
+
+      emailInput.value =
+        originalProfile.email;
+
+      companyInput.value =
+        originalProfile.company;
+
+      websiteInput.value =
+        originalProfile.website;
+
+    }
+
+
+    /* =====================================================
+       PASSWORD STRENGTH
+    ===================================================== */
+
+    const newPassword =
+      document.getElementById(
+        "newPassword"
+      );
+
+    const strength =
+      document.getElementById(
+        "passwordStrength"
+      );
+
+    const strengthBar =
+      document.getElementById(
+        "passwordStrengthBar"
+      );
+
+
+    newPassword.addEventListener(
+      "input",
+      function () {
+
+        const value =
+          newPassword.value;
+
+
+        if (!value) {
+
+          strength.style.display =
+            "none";
+
+          strengthBar.style.width =
+            "0%";
+
+          return;
+
+        }
+
+
+        strength.style.display =
+          "block";
+
+
+        let score = 0;
+
+
+        if (value.length >= 8) {
+          score++;
+        }
+
+        if (/[A-Z]/.test(value)) {
+          score++;
+        }
+
+        if (/[a-z]/.test(value)) {
+          score++;
+        }
+
+        if (/[0-9]/.test(value)) {
+          score++;
+        }
+
+        if (/[^A-Za-z0-9]/.test(value)) {
+          score++;
+        }
+
+
+        const percentage =
+          Math.min(
+            score * 20,
+            100
+          );
+
+
+        strengthBar.style.width =
+          percentage + "%";
+
+      }
+    );
+
+
+    /* =====================================================
+       CHANGE PASSWORD
+    ===================================================== */
+
+    document
+      .getElementById("passwordForm")
+      .addEventListener(
+        "submit",
+        async function (event) {
+
+          event.preventDefault();
+
+
+          const currentPassword =
+            document.getElementById(
+              "currentPassword"
+            ).value;
+
+          const password =
+            newPassword.value;
+
+          const confirmPassword =
+            document.getElementById(
+              "confirmPassword"
+            ).value;
+
+
+          if (
+            !currentPassword ||
+            !password ||
+            !confirmPassword
+          ) {
+
+            showToast(
+              "Please fill all password fields.",
+              "error"
+            );
+
+            return;
+          }
+
+
+          if (password.length < 8) {
+
+            showToast(
+              "New password must contain at least 8 characters.",
+              "error"
+            );
+
+            return;
+          }
+
+
+          if (
+            password !==
+            confirmPassword
+          ) {
+
+            showToast(
+              "New passwords do not match.",
+              "error"
+            );
+
+            return;
+          }
+
+
+          const button =
+            document.getElementById(
+              "passwordBtn"
+            );
+
+
+          button.disabled = true;
+
+          button.innerHTML =
+            '<span class="spinner"></span>Updating...';
+
+
+          try {
+
+            const response =
+              await apiFetch(
+                "/api/profile/change-password",
+                {
+                  method: "PUT",
+
+                  headers: {
+                    "Content-Type":
+                      "application/json",
+
+                    Authorization:
+                      "Bearer " + token
+                  },
+
+                  body: JSON.stringify({
+                    currentPassword,
+                    newPassword:
+                      password
+                  })
+                }
+              );
+
+
+            if (response.status === 401) {
+
+              localStorage.removeItem(
+                "token"
+              );
+
+              window.location.href =
+                "login.html";
+
+              return;
+            }
+
+
+            const data =
+              await response.json();
+
+
+            if (data.success) {
+
+              document.getElementById(
+                "passwordForm"
+              ).reset();
+
+
+              strength.style.display =
+                "none";
+
+              strengthBar.style.width =
+                "0%";
+
+
+              showToast(
+                "Password updated successfully."
+              );
+
+            } else {
+
+              showToast(
+                data.message ||
+                  "Unable to update password.",
+                "error"
+              );
+
+            }
+
+
+          } catch (error) {
+
+            console.error(
+              "PASSWORD UPDATE ERROR:",
+              error
+            );
+
+            showToast(
+              "Something went wrong while changing your password.",
+              "error"
+            );
+
+          } finally {
+
+            button.disabled = false;
+
+            button.textContent =
+              "Update Password";
+
+          }
+
+        }
+      );
+
+
+    /* =====================================================
+       LOAD STATS
+    ===================================================== */
+
+    async function loadStats() {
+
+      try {
+
+        const response =
+          await apiFetch(
+            "/api/analyze",
+            {
+              method: "GET",
+
+              headers: {
+                Authorization:
+                  "Bearer " + token
+              }
+            }
+          );
+
+
+        if (response.status === 401) {
+
+          localStorage.removeItem(
+            "token"
+          );
+
+          window.location.href =
+            "login.html";
+
+          return;
+        }
+
+
+        const data =
+          await response.json();
+
+
+        const reports =
+          Array.isArray(data.reports)
+            ? data.reports
+            : [];
+
+
+        /* AUDITS */
+
+        document.getElementById(
+          "auditCount"
+        ).textContent =
+          reports.length;
+
+
+        /* REPORTS */
+
+        document.getElementById(
+          "reportCount"
+        ).textContent =
+          reports.length;
+
+
+        if (!reports.length) {
+
+          document.getElementById(
+            "avgScore"
+          ).textContent = "0";
+
+          document.getElementById(
+            "bestRank"
+          ).textContent = "-";
+
+          return;
+
+        }
+
+
+        /* CALCULATE SCORES */
+
+        const scores =
+          reports
+            .map(report => {
+
+              const performance =
+                Number(
+                  report.performance || 0
+                );
+
+              const accessibility =
+                Number(
+                  report.accessibility || 0
+                );
+
+              const seo =
+                Number(
+                  report.seo || 0
+                );
+
+              const bestPractices =
+                Number(
+                  report.bestPractices || 0
+                );
+
+              const pwa =
+                Number(
+                  report.pwa || 0
+                );
+
+
+              const values = [
+                performance,
+                accessibility,
+                seo,
+                bestPractices,
+                pwa
+              ];
+
+
+              const validValues =
+                values.filter(
+                  value =>
+                    Number.isFinite(value)
+                );
+
+
+              if (!validValues.length) {
+                return 0;
+              }
+
+
+              return Math.round(
+                validValues.reduce(
+                  (sum, value) =>
+                    sum + value,
+                  0
+                ) /
+                  validValues.length
+              );
+
+            })
+            .filter(
+              score =>
+                Number.isFinite(score)
+            );
+
+
+        if (!scores.length) {
+
+          return;
+
+        }
+
+
+        /* AVERAGE */
+
+        const average =
+          Math.round(
+            scores.reduce(
+              (sum, score) =>
+                sum + score,
+              0
+            ) /
+              scores.length
+          );
+
+
+        /* BEST */
+
+        const best =
+          Math.max(...scores);
+
+
+        document.getElementById(
+          "avgScore"
+        ).textContent =
+          average;
+
+
+        document.getElementById(
+          "bestRank"
+        ).textContent =
+          getGrade(best);
+
+      } catch (error) {
+
+        console.error(
+          "STATS ERROR:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       GRADE
+    ===================================================== */
+
+    function getGrade(score) {
+
+      if (score >= 95) {
+        return "S";
+      }
+
+      if (score >= 90) {
+        return "A+";
+      }
+
+      if (score >= 80) {
+        return "A";
+      }
+
+      if (score >= 70) {
+        return "B";
+      }
+
+      if (score >= 60) {
+        return "C";
+      }
+
+      if (score >= 50) {
+        return "D";
+      }
+
+      return "F";
+
+    }
+
+
+    /* =====================================================
+       PHOTO PREVIEW
+    ===================================================== */
+
+    document
+      .getElementById("photoInput")
+      .addEventListener(
+        "change",
+        function (event) {
+
+          const file =
+            event.target.files[0];
+
+
+          if (!file) {
+            return;
+          }
+
+
+          if (
+            ![
+              "image/jpeg",
+              "image/png",
+              "image/webp"
+            ].includes(file.type)
+          ) {
+
+            showToast(
+              "Please select a JPG, PNG or WEBP image.",
+              "error"
+            );
+
+            event.target.value = "";
+
+            return;
+          }
+
+
+          if (
+            file.size >
+            5 * 1024 * 1024
+          ) {
+
+            showToast(
+              "Image size must be less than 5 MB.",
+              "error"
+            );
+
+            event.target.value = "";
+
+            return;
+          }
+
+
+          const reader =
+            new FileReader();
+
+
+          reader.onload =
+            function (e) {
+
+              avatar.innerHTML =
+                `<img src="${e.target.result}" alt="Profile photo">`;
+
+            };
+
+
+          reader.readAsDataURL(file);
+
+
+          /*
+             NOTE:
+             This currently previews the photo locally.
+
+             To permanently save it, connect this
+             input to your backend upload endpoint.
+          */
+
+          alert(
+            "Profile photo preview updated."
+          );
+
+        }
+      );
+
+
+    /* =====================================================
+       DELETE ACCOUNT
+    ===================================================== */
+
+    async function deleteAccount() {
+
+      const firstConfirm =
+        confirm(
+          "Are you sure you want to delete your account?"
+        );
+
+
+      if (!firstConfirm) {
+        return;
+      }
+
+
+      const secondConfirm =
+        confirm(
+          "This action cannot be undone. Delete your account permanently?"
+        );
+
+
+      if (!secondConfirm) {
+        return;
+      }
+
+
+      /*
+         IMPORTANT:
+         Replace the endpoint below with your
+         actual backend delete-account endpoint
+         when it is implemented.
+      */
+
+      try {
+
+        const response =
+          await apiFetch(
+            "/api/profile",
+            {
+              method: "DELETE",
+
+              headers: {
+                Authorization:
+                  "Bearer " + token
+              }
+            }
+          );
+
+
+        if (response.status === 401) {
+
+          localStorage.removeItem(
+            "token"
+          );
+
+          window.location.href =
+            "login.html";
+
+          return;
+        }
+
+
+        const data =
+          await response.json();
+
+
+        if (data.success) {
+
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          localStorage.removeItem("userEmail");
+
+          showToast(
+            "Account deleted successfully."
+          );
+
+
+          setTimeout(
+            () => {
+              window.location.href =
+                "login.html";
+            },
+            1000
+          );
+
+        } else {
+
+          showToast(
+            data.message ||
+              "Unable to delete account.",
+            "error"
+          );
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "DELETE ACCOUNT ERROR:",
+          error
+        );
+
+        showToast(
+          "Account deletion request failed.",
+          "error"
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       LOGOUT
+    ===================================================== */
+
+    function logout(event) {
+
+      event.preventDefault();
+
+
+      localStorage.removeItem(
+        "token"
+      );
+
+
+      localStorage.removeItem(
+        "user"
+      );
+
+
+      localStorage.removeItem(
+        "userEmail"
+      );
+
+
+      window.location.href =
+        "login.html";
+
+    }
+
+
+    /* =====================================================
+       INITIALIZE
+    ===================================================== */
+
+    async function initializeProfile() {
+
+      await loadProfile();
+
+      await loadStats();
+
+    }
+
+
+    initializeProfile();
+
+  </script>
+
+
+  <!-- OPTIONAL TOASTIFY -->
+
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+  <script src="js/toast.js?v=2"></script>
+
+</body>
+
+</html>

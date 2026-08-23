@@ -1,0 +1,336 @@
+/* Shared WebRank AI application surfaces */
+
+#wr-toast-container {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 10000;
+    display: flex;
+    width: min(360px, calc(100vw - 32px));
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.wr-toast {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    min-height: 48px;
+    padding: 13px 12px 13px 16px;
+    border: 1px solid var(--border, rgba(255, 255, 255, .12));
+    border-left: 4px solid var(--accent, #38bdf8);
+    border-radius: var(--radius-sm, 10px);
+    background: var(--bg-secondary, #0f172a);
+    color: var(--text-primary, #f8fafc);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .22);
+    font-size: 14px;
+    line-height: 1.4;
+    pointer-events: auto;
+    animation: wr-toast-in .2s ease-out;
+}
+
+.wr-toast-success { border-left-color: var(--success, #22c55e); }
+.wr-toast-warning { border-left-color: var(--warning, #f59e0b); }
+.wr-toast-error { border-left-color: var(--danger, #ef4444); }
+.wr-toast-info { border-left-color: var(--accent, #38bdf8); }
+
+.wr-toast-close {
+    flex: 0 0 auto;
+    border: 0;
+    padding: 0 4px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+    opacity: .7;
+}
+
+.wr-toast-close:hover { opacity: 1; }
+
+@keyframes wr-toast-in {
+    from { transform: translateY(-8px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+img,
+svg,
+video,
+canvas {
+    max-width: 100%;
+}
+
+table {
+    max-width: 100%;
+}
+
+.sidebar {
+    width: 260px;
+    min-width: 260px;
+    min-height: 100vh;
+    padding: 28px 18px;
+    background: var(--sidebar, var(--bg-secondary));
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    transition: background-color .25s ease, border-color .25s ease;
+}
+
+.sidebar .logo,
+.sidebar .logo span {
+    color: var(--primary, var(--accent));
+}
+
+.sidebar .logo {
+    margin: 0 12px 35px;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.sidebar .menu {
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar .menu li {
+    margin: 6px 0;
+}
+
+.sidebar .menu a,
+.sidebar .menu button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 0;
+    border-radius: var(--radius-sm, 10px);
+    background: transparent;
+    color: var(--text-secondary, var(--muted));
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.25;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color .2s ease, color .2s ease, transform .2s ease;
+}
+
+.sidebar .menu a:hover,
+.sidebar .menu button:hover {
+    background: var(--hover, rgba(56, 189, 248, .12));
+    color: var(--text, var(--text-primary));
+    transform: translateX(2px);
+}
+
+.sidebar .menu a.active,
+.sidebar .menu button.active {
+    background: var(--primary, var(--accent));
+    color: #001018;
+    font-weight: 700;
+    box-shadow: 0 8px 25px rgba(56, 189, 248, .16);
+}
+
+.sidebar .menu a.active:hover,
+.sidebar .menu button.active:hover {
+    background: var(--primary, var(--accent));
+    color: #001018;
+    transform: none;
+}
+
+body,
+.card,
+.login-card,
+.signup-card,
+.sidebar,
+input,
+textarea,
+select,
+button {
+    transition: background-color .25s ease, color .25s ease, border-color .25s ease;
+}
+
+body {
+    background: var(--bg-primary, var(--bg));
+    color: var(--text-primary, var(--text));
+}
+
+.login-card,
+.signup-card,
+.container > .card,
+body > .container > .card {
+    background: var(--bg-card, var(--card));
+    border: 1px solid var(--border);
+    color: var(--text-primary, var(--text));
+    box-shadow: 0 20px 50px rgba(0, 0, 0, .18);
+}
+
+.login-container,
+.signup-container {
+    width: 100%;
+    max-width: 600px;
+    margin-inline: auto;
+}
+
+.login-card,
+.signup-card,
+.card {
+    max-width: 100%;
+}
+
+.login-card input,
+.signup-card input,
+.container input,
+.container textarea,
+.container select,
+.card input,
+.card textarea,
+.card select {
+    background: var(--input-bg, var(--bg-secondary));
+    color: var(--text-primary, var(--text));
+    border-color: var(--border);
+}
+
+.login-card input::placeholder,
+.signup-card input::placeholder,
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-muted, var(--text-secondary));
+}
+
+.login-card label,
+.signup-card label,
+.container label,
+.card label {
+    color: var(--text-primary, var(--text));
+}
+
+.login-card .logo h1,
+.signup-card .logo h1,
+.card h1,
+.card h2 {
+    color: var(--primary, var(--accent));
+}
+
+.login-card .logo p,
+.signup-card .logo p,
+.subtitle,
+.card p {
+    color: var(--text-secondary, var(--muted));
+}
+
+@media (max-width: 768px) {
+    body {
+        min-width: 0;
+    }
+
+    .sidebar {
+        width: min(260px, 82vw);
+        min-width: 0;
+        padding: 24px 14px;
+    }
+
+    .container,
+    .main-content,
+    .content,
+    main {
+        max-width: 100%;
+    }
+
+    .login-container,
+    .signup-container {
+        margin-top: 24px;
+    }
+
+    .login-card,
+    .signup-card,
+    .card {
+        border-radius: var(--radius-md, 14px);
+    }
+
+    .settings-grid,
+    .stats,
+    .features,
+    .why-grid,
+    .testimonial-grid,
+    .pricing-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .setting-item {
+        gap: 12px;
+    }
+
+    .setting-item > input,
+    .setting-item > select {
+        width: 100% !important;
+        max-width: 100%;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .login-card,
+    .signup-card,
+    .card {
+        padding: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 16px;
+    }
+
+    .navbar ul {
+        flex: 1 1 100%;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .navbar ul li:nth-child(2),
+    .navbar ul li:nth-child(4),
+    .navbar ul li:nth-child(5) {
+        display: none;
+    }
+
+    .login-card,
+    .signup-card,
+    .card {
+        padding: 20px;
+    }
+
+    .login-container,
+    .signup-container {
+        max-width: 100%;
+    }
+
+    h1 {
+        overflow-wrap: anywhere;
+    }
+}

@@ -1,0 +1,43 @@
+@baseUrl = http://localhost:5000
+@authToken = paste-a-valid-jwt-here
+
+### Signup
+POST {{baseUrl}}/api/auth/signup
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "test@example.com",
+  "password": "replace-with-a-strong-password"
+}
+
+### Login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "replace-with-a-strong-password"
+}
+
+### Analyze a public website
+POST {{baseUrl}}/api/analyze
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "url": "https://example.com"
+}
+
+### Compare two public websites
+POST {{baseUrl}}/api/compare
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "url1": "https://example.com",
+  "url2": "https://www.iana.org"
+}
+
+###
+

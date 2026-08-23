@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | WebRank AI</title>
+    <script src="js/theme.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================================
+   THEME VARIABLES
+========================================================= */
+
+        :root {
+            --bg: #0b1220;
+            --sidebar: #0f172a;
+            --card: #1e293b;
+            --card-soft: rgba(255, 255, 255, 0.035);
+
+            --text: #ffffff;
+            --text-secondary: #94a3b8;
+
+            --primary: #38bdf8;
+            --primary-dark: #2563eb;
+
+            --input-bg: #0f172a;
+
+            --border: rgba(255, 255, 255, 0.08);
+            --border-strong: rgba(255, 255, 255, 0.14);
+
+            --success: #22c55e;
+            --error: #ef4444;
+
+            --shadow: rgba(0, 0, 0, 0.4);
+        }
+
+
+        /* =========================================================
+   LIGHT THEME
+========================================================= */
+
+        .light-theme {
+            --bg: #f8fafc;
+            --sidebar: #e2e8f0;
+            --card: #ffffff;
+            --card-soft: rgba(15, 23, 42, 0.035);
+
+            --text: #111827;
+            --text-secondary: #475569;
+
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+
+            --input-bg: #ffffff;
+
+            --border: rgba(15, 23, 42, 0.12);
+            --border-strong: rgba(15, 23, 42, 0.18);
+
+            --shadow: rgba(15, 23, 42, 0.12);
+        }
+
+
+        /* =========================================================
+   GLOBAL RESET
+========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+
+            padding: 0 30px 30px;
+
+            background: var(--bg);
+
+            color: var(--text);
+
+            transition:
+                background 0.3s ease,
+                color 0.3s ease;
+
+            position: relative;
+            overflow-x: hidden;
+        }
+
+
+        /* =========================================================
+   BACKGROUND GLOW
+========================================================= */
+
+        body::before {
+            content: "";
+
+            position: fixed;
+
+            width: 600px;
+            height: 600px;
+
+            background:
+                radial-gradient(circle,
+                    var(--primary),
+                    transparent 60%);
+
+            filter: blur(120px);
+
+            opacity: 0.12;
+
+            top: -180px;
+            right: -180px;
+
+            pointer-events: none;
+
+            z-index: -1;
+        }
+
+
+        /* =========================================================
+   SECONDARY GLOW
+========================================================= */
+
+        body::after {
+            content: "";
+
+            position: fixed;
+
+            width: 450px;
+            height: 450px;
+
+            background:
+                radial-gradient(circle,
+                    var(--primary-dark),
+                    transparent 65%);
+
+            filter: blur(120px);
+
+            opacity: 0.08;
+
+            bottom: -200px;
+            left: -150px;
+
+            pointer-events: none;
+
+            z-index: -1;
+        }
+
+
+        /* =========================
+   NAVBAR
+========================= */
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            margin-bottom: 50px;
+
+            background: var(--navbar);
+            border-bottom: 1px solid var(--border);
+
+            position: sticky;
+            top: 0;
+            z-index: 100;
+
+            backdrop-filter: blur(15px);
+        }
+
+        .logo {
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        nav a[aria-current="page"] {
+            color: var(--primary);
+        }
+
+        .navbar a[href="contact-us.html"] {
+            color: var(--primary);
+        }
+
+
+        /* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+        .container {
+            width: 100%;
+
+            max-width: 1100px;
+
+            margin: 0 auto;
+
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            border-radius: 24px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 20px 60px var(--shadow);
+
+            backdrop-filter: blur(20px);
+
+            animation:
+                fadeUp 0.7s ease;
+
+            transition:
+                background 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            box-shadow:
+                0 25px 70px color-mix(in srgb,
+                    var(--primary) 12%,
+                    transparent);
+        }
+
+
+        /* =========================================================
+   MAIN GRID
+========================================================= */
+
+        .wrapper {
+            display: grid;
+
+            grid-template-columns:
+                0.9fr 1.3fr;
+        }
+
+
+        /* =========================================================
+   LEFT SECTION
+========================================================= */
+
+        .left {
+            padding: 50px 42px;
+
+            background:
+                color-mix(in srgb,
+                    var(--sidebar) 80%,
+                    transparent);
+
+            border-right:
+                1px solid var(--border);
+
+            transition:
+                background 0.3s ease,
+                border-color 0.3s ease;
+        }
+
+
+        /* =========================================================
+   LEFT LOGO
+========================================================= */
+
+        .left .logo {
+            font-size: 28px;
+
+            font-weight: 800;
+
+            margin-bottom: 25px;
+
+            color: var(--text);
+
+            letter-spacing: -0.8px;
+        }
+
+        .left .logo span {
+            color: var(--primary);
+        }
+
+
+        /* =========================================================
+   LEFT HEADING
+========================================================= */
+
+        .left h2 {
+            font-size: 28px;
+
+            margin-bottom: 14px;
+
+            color: var(--text);
+        }
+
+
+        /* =========================================================
+   LEFT DESCRIPTION
+========================================================= */
+
+        .left>p {
+            color: var(--text-secondary);
+
+            line-height: 1.75;
+
+            font-size: 15px;
+
+            margin-bottom: 35px;
+        }
+
+
+        /* =========================================================
+   CONTACT INFORMATION
+========================================================= */
+
+        .info {
+            margin-bottom: 22px;
+
+            padding: 14px;
+
+            border-radius: 14px;
+
+            border: 1px solid transparent;
+
+            transition:
+                transform 0.25s ease,
+                background 0.25s ease,
+                border-color 0.25s ease;
+        }
+
+        .info:hover {
+            transform: translateX(6px);
+
+            background:
+                var(--card-soft);
+
+            border-color:
+                var(--border);
+        }
+
+        .info h4 {
+            color: var(--primary);
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            margin-bottom: 6px;
+        }
+
+        .info p {
+            margin: 0;
+
+            color: var(--text-secondary);
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================================================
+   SOCIAL ICONS
+========================================================= */
+
+        .socials {
+            display: flex;
+
+            gap: 12px;
+
+            margin-top: 30px;
+        }
+
+        .socials span {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background:
+                var(--card-soft);
+
+            border:
+                1px solid var(--border);
+
+            font-size: 19px;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.25s ease,
+                background 0.25s ease,
+                border-color 0.25s ease;
+        }
+
+        .socials span:hover {
+            transform:
+                translateY(-5px);
+
+            background:
+                rgba(56, 189, 248, 0.1);
+
+            border-color:
+                rgba(56, 189, 248, 0.35);
+        }
+
+
+        /* =========================================================
+   RIGHT SECTION
+========================================================= */
+
+        .right {
+            padding: 50px 45px;
+
+            background:
+                var(--card);
+        }
+
+
+        /* =========================================================
+   RIGHT HEADING
+========================================================= */
+
+        .right h1 {
+            color: var(--text);
+
+            font-size: 36px;
+
+            font-weight: 800;
+
+            letter-spacing: -0.8px;
+
+            margin-bottom: 10px;
+        }
+
+
+        /* =========================================================
+   SUBTITLE
+========================================================= */
+
+        .subtitle {
+            color: var(--text-secondary);
+
+            font-size: 15px;
+
+            line-height: 1.6;
+
+            margin-bottom: 32px;
+        }
+
+
+        /* =========================================================
+   FORM
+========================================================= */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+
+        /* =========================================================
+   LABEL
+========================================================= */
+
+        label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: var(--text);
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================================================
+   INPUTS
+========================================================= */
+
+        input,
+        textarea {
+            width: 100%;
+
+            padding: 14px 15px;
+
+            border-radius: 12px;
+
+            border:
+                1px solid var(--border-strong);
+
+            background:
+                var(--input-bg);
+
+            color:
+                var(--text);
+
+            outline: none;
+
+            font-size: 14px;
+
+            transition:
+                border-color 0.25s ease,
+                box-shadow 0.25s ease,
+                background 0.25s ease;
+        }
+
+
+        /* =========================================================
+   PLACEHOLDER
+========================================================= */
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--text-secondary);
+
+            opacity: 0.8;
+        }
+
+
+        /* =========================================================
+   INPUT FOCUS
+========================================================= */
+
+        input:focus,
+        textarea:focus {
+            border-color:
+                var(--primary);
+
+            box-shadow:
+                0 0 0 3px rgba(56, 189, 248, 0.12);
+
+            background:
+                var(--input-bg);
+        }
+
+
+        /* =========================================================
+   TEXTAREA
+========================================================= */
+
+        textarea {
+            min-height: 145px;
+
+            resize: vertical;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================================================
+   SUBMIT BUTTON
+========================================================= */
+
+        button {
+            width: 100%;
+
+            padding: 15px 20px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(135deg,
+                    var(--primary),
+                    var(--primary-dark));
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                opacity 0.25s ease;
+        }
+
+        button:hover {
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 12px 30px rgba(37, 99, 235, 0.3);
+        }
+
+        button:active {
+            transform:
+                translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+
+            cursor: not-allowed;
+
+            transform: none;
+
+            box-shadow: none;
+        }
+
+
+        /* =========================================================
+   SUCCESS MESSAGE
+========================================================= */
+
+        .success {
+            margin-top: 20px;
+
+            padding: 13px 15px;
+
+            text-align: center;
+
+            border-radius: 10px;
+
+            color: var(--success);
+
+            background:
+                rgba(34, 197, 94, 0.08);
+
+            border:
+                1px solid rgba(34, 197, 94, 0.2);
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================================================
+   FOOTER
+========================================================= */
+
+        .footer {
+            max-width: 1100px;
+
+            margin: 20px auto 0;
+
+            padding: 20px;
+
+            text-align: center;
+
+            color: var(--text-secondary);
+
+            font-size: 13px;
+
+            border-top:
+                1px solid var(--border);
+        }
+
+
+        /* =========================================================
+   ANIMATION
+========================================================= */
+
+        @keyframes fadeUp {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(35px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        /* =========================================================
+   TABLET
+========================================================= */
+
+        @media (max-width: 900px) {
+
+            body {
+                padding:
+                    0 20px 25px;
+            }
+
+            .navbar {
+                width: 94%;
+            }
+
+            .navbar ul {
+                gap: 3px;
+            }
+
+            .navbar a {
+                padding:
+                    8px 9px;
+
+                font-size: 13px;
+            }
+
+            .wrapper {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .left {
+                border-right: none;
+
+                border-bottom:
+                    1px solid var(--border);
+            }
+
+            .right {
+                padding:
+                    40px 35px;
+            }
+        }
+
+
+        /* =========================================================
+   MOBILE
+========================================================= */
+
+        @media (max-width: 650px) {
+
+            body {
+                padding:
+                    0 14px 20px;
+            }
+
+            .navbar {
+                position: sticky;
+
+                top: 0;
+
+                padding:
+                    10px 12px;
+
+                flex-direction: column;
+
+                gap: 8px;
+            }
+
+            .navbar .logo {
+                font-size: 19px;
+            }
+
+            .navbar ul {
+                width: 100%;
+
+                justify-content: center;
+
+                flex-wrap: wrap;
+
+                gap: 3px;
+            }
+
+            .navbar a {
+                padding:
+                    6px 8px;
+
+                font-size: 11px;
+            }
+
+            .container {
+                border-radius: 18px;
+            }
+
+            .left {
+                padding:
+                    35px 25px;
+            }
+
+            .right {
+                padding:
+                    35px 25px;
+            }
+
+            .left .logo {
+                font-size: 24px;
+            }
+
+            .left h2 {
+                font-size: 24px;
+            }
+
+            .right h1 {
+                font-size: 30px;
+            }
+        }
+
+
+        /* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+        @media (max-width: 420px) {
+
+            body {
+                padding:
+                    0 10px 15px;
+            }
+
+            .navbar {
+                width: 96%;
+            }
+
+            .navbar ul {
+                gap: 1px;
+            }
+
+            .navbar a {
+                font-size: 10px;
+
+                padding:
+                    5px 6px;
+            }
+
+            .left,
+            .right {
+                padding:
+                    28px 18px;
+            }
+
+            .socials span {
+                width: 38px;
+                height: 38px;
+
+                font-size: 17px;
+            }
+
+            .footer {
+                font-size: 12px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="Css/app.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <h2 class="logo">WebRank AI</h2>
+
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="about-us.html">About Us</a></li>
+            <li><a href="contact-us.html" aria-current="page">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+
+        <div class="wrapper">
+
+            <!-- Left Side -->
+
+            <div class="left">
+
+                <div class="logo">
+                    WebRank <span>AI</span>
+                </div>
+
+                <h2>Let's Talk</h2>
+
+                <p>
+                    Have questions, feedback, or need support?
+                    Our team is available 24/7 to help you
+                    improve your website rankings and performance.
+                </p>
+
+                <div class="info">
+                    <h4>Email</h4>
+                    <p>support@webrankai.com</p>
+                </div>
+
+                <div class="info">
+                    <h4>Phone</h4>
+                    <p>+91 9373556727</p>
+                </div>
+
+                <div class="info">
+                    <h4>Website</h4>
+                    <p>www.webrankai.com</p>
+                </div>
+
+                <div class="info">
+                    <h4>Support Hours</h4>
+                    <p>24/7 Customer Support</p>
+                </div>
+                <div class="socials">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <!-- Right Side -->
+
+            <div class="right">
+
+                <h1>Contact Us</h1>
+
+                <p class="subtitle">
+                    We'd love to hear from you. Send us a message.
+                </p>
+
+                <form id="contactForm">
+
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="name" placeholder="Enter your name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="email" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" id="subject" placeholder="Enter subject" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea id="message" placeholder="Write your message..." required></textarea>
+                    </div>
+
+                    <button type="submit">
+                        Send Message
+                    </button>
+
+                </form>
+
+                <div id="successMessage"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <footer class="footer">
+        © 2026 WebRank AI • All Rights Reserved
+    </footer>
+
+    <script src="js/api.js"></script>
+
+    <script>
+        document
+            .getElementById("contactForm")
+            .addEventListener("submit", async function (e) {
+
+                e.preventDefault();
+
+                const name =
+                    document.getElementById("name").value.trim();
+
+                const email =
+                    document.getElementById("email").value.trim();
+
+                const subject =
+                    document.getElementById("subject").value.trim();
+
+                const message =
+                    document.getElementById("message").value.trim();
+
+                const button =
+                    this.querySelector("button");
+
+                try {
+
+                    button.disabled = true;
+                    button.textContent = "Sending...";
+
+                    const response = await apiFetch("/api/contact", {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            name,
+                            email,
+                            subject,
+                            message
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(
+                            data.message || "Unable to send message."
+                        );
+                    }
+
+                    document.getElementById("successMessage").innerHTML =
+                        "<p class='success'>✅ Message sent successfully!</p>";
+
+                    this.reset();
+
+                } catch (error) {
+
+                    console.error("CONTACT ERROR:", error);
+
+                    document.getElementById("successMessage").innerHTML =
+                        `<p style="color:#ef4444;text-align:center;margin-top:20px;">
+          ❌ ${error.message}
+        </p>`;
+
+                } finally {
+
+                    button.disabled = false;
+                    button.textContent = "Send Message";
+
+                }
+
+            });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="js/toast.js?v=2"></script>
+</body>
+
+</html>
