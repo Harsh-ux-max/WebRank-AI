@@ -20,8 +20,7 @@ const API_BASE_URL =
     configuredApiUrl ||
     (isLocalFrontendServer || window.location.protocol === "file:"
         ? "http://localhost:5000"
-        : "");
-
+        : "https://webrank-ai.onrender.com");
 
 /* =========================
    API FETCH HELPER
