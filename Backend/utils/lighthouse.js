@@ -1,8 +1,5 @@
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 const lighthouse = require("lighthouse").default;
-
-const CHROME_PATH =
-  "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 
 async function runLighthouse(url) {
   let browser;
@@ -11,7 +8,6 @@ async function runLighthouse(url) {
     console.log("Starting Lighthouse:", url);
 
     browser = await puppeteer.launch({
-      executablePath: CHROME_PATH,
       headless: true,
 
       args: [
@@ -37,7 +33,7 @@ async function runLighthouse(url) {
     console.log("Chrome debugging port:", port);
 
     const result = await lighthouse(url, {
-      port: port,
+      port,
       output: "json",
       logLevel: "error",
 
@@ -55,9 +51,7 @@ async function runLighthouse(url) {
     });
 
     if (!result || !result.lhr) {
-      throw new Error(
-        "Lighthouse did not return a report."
-      );
+      throw new Error("Lighthouse did not return a report.");
     }
 
     const lhr = result.lhr;
@@ -76,15 +70,9 @@ async function runLighthouse(url) {
 
     const report = {
       performance: Math.round(performance * 100),
-
-      accessibility:
-        Math.round(accessibility * 100),
-
-      bestPractices:
-        Math.round(bestPractices * 100),
-
-      seo:
-        Math.round(seo * 100)
+      accessibility: Math.round(accessibility * 100),
+      bestPractices: Math.round(bestPractices * 100),
+      seo: Math.round(seo * 100)
     };
 
     console.log("Lighthouse result:", report);
@@ -92,16 +80,10 @@ async function runLighthouse(url) {
     return report;
 
   } catch (error) {
-
-    console.error(
-      "LIGHTHOUSE ERROR:",
-      error.message
-    );
-
+    console.error("LIGHTHOUSE ERROR:", error.message);
     throw error;
 
   } finally {
-
     if (browser) {
       try {
         await browser.close();
