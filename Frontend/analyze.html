@@ -737,7 +737,7 @@
                  SEARCH
             ================================================== -->
 
-            <div class="search-box">
+            <form class="search-box" id="analyzeForm" novalidate>
 
                 <input
                     type="url"
@@ -747,13 +747,13 @@
                 >
 
                 <button
-                    type="button"
+                    type="submit"
                     id="analyzeButton"
                 >
                     Analyze
                 </button>
 
-            </div>
+            </form>
 
 
             <div
@@ -889,6 +889,9 @@
 
         const analyzeButton =
             document.getElementById("analyzeButton");
+
+        const analyzeForm =
+            document.getElementById("analyzeForm");
 
         const loadingSection =
             document.getElementById("loadingSection");
@@ -1393,11 +1396,13 @@
            ANALYZE BUTTON
         ===================================================== */
 
-        analyzeButton.addEventListener(
-            "click",
-            analyzeWebsite
+        analyzeForm.addEventListener(
+            "submit",
+            function (event) {
+                event.preventDefault();
+                analyzeWebsite();
+            }
         );
-
 
         /* =====================================================
            ENTER KEY

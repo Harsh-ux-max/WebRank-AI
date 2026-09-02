@@ -334,3 +334,180 @@ textarea::placeholder {
         overflow-wrap: anywhere;
     }
 }
+
+/* Shared responsive navigation and layout safeguards. Page-specific styles
+   remain responsible for their visual treatment. */
+.wr-mobile-menu-toggle {
+    display: none;
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 1101;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .22);
+}
+
+.wr-mobile-menu-toggle span {
+    display: block;
+    height: 2px;
+    margin: 4px 0;
+    border-radius: 2px;
+    background: currentColor;
+}
+
+.wr-sidebar-overlay {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    body.wr-sidebar-page {
+        display: block !important;
+        min-width: 0;
+    }
+
+    body.wr-sidebar-page .sidebar {
+        position: fixed !important;
+        inset: 0 auto 0 0;
+        width: min(280px, 86vw) !important;
+        min-width: 0 !important;
+        height: 100vh !important;
+        min-height: 100vh !important;
+        overflow-y: auto;
+        padding: 72px 16px 24px !important;
+        transform: translateX(-105%);
+        transition: transform .25s ease;
+        z-index: 1100;
+    }
+
+    body.wr-sidebar-page .sidebar.open {
+        transform: translateX(0) !important;
+    }
+
+    body.wr-sidebar-page .wr-mobile-menu-toggle {
+        display: block;
+    }
+
+    body.wr-sidebar-page .wr-sidebar-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 1099;
+        background: rgba(2, 8, 23, .64);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .25s ease;
+    }
+
+    body.wr-sidebar-page .wr-sidebar-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    body.wr-sidebar-page .container,
+    body.wr-sidebar-page .main,
+    body.wr-sidebar-page .content {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        padding-left: clamp(16px, 4vw, 32px) !important;
+        padding-right: clamp(16px, 4vw, 32px) !important;
+    }
+
+    body.wr-sidebar-page .container {
+        padding-top: 72px !important;
+    }
+
+    body.wr-sidebar-page .card,
+    body.wr-sidebar-page .login-card,
+    body.wr-sidebar-page .signup-card {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    body.wr-sidebar-page img,
+    body.wr-sidebar-page canvas,
+    body.wr-sidebar-page iframe {
+        max-width: 100%;
+    }
+
+    body.wr-sidebar-page .search-box,
+    body.wr-sidebar-page .compare-inputs,
+    body.wr-sidebar-page .btn-row,
+    body.wr-sidebar-page .header-actions {
+        max-width: 100%;
+    }
+
+    body.wr-sidebar-page .search-box input,
+    body.wr-sidebar-page .search-box button,
+    body.wr-sidebar-page input,
+    body.wr-sidebar-page textarea,
+    body.wr-sidebar-page select,
+    body.wr-sidebar-page button {
+        max-width: 100%;
+    }
+
+    body.wr-nav-open {
+        overflow: hidden;
+    }
+}
+
+@media (max-width: 600px) {
+    body.wr-sidebar-page h1 {
+        font-size: clamp(26px, 8vw, 34px);
+        line-height: 1.15;
+    }
+
+    body.wr-sidebar-page .card,
+    body.wr-sidebar-page .login-card,
+    body.wr-sidebar-page .signup-card {
+        padding: 20px 16px !important;
+        border-radius: 16px;
+    }
+
+    body.wr-sidebar-page .stats,
+    body.wr-sidebar-page .features,
+    body.wr-sidebar-page .info,
+    body.wr-sidebar-page .score-container,
+    body.wr-sidebar-page .compare-grid,
+    body.wr-sidebar-page .profile-grid,
+    body.wr-sidebar-page .settings-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.wr-sidebar-page .search-box {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    body.wr-sidebar-page .search-box input,
+    body.wr-sidebar-page .search-box button {
+        width: 100% !important;
+        border-radius: 10px !important;
+    }
+
+    body.wr-sidebar-page .score-circle,
+    body.wr-sidebar-page .circle {
+        width: min(120px, 42vw);
+        height: min(120px, 42vw);
+    }
+
+    body.wr-sidebar-page table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    body.wr-sidebar-page .chart-card canvas,
+    body.wr-sidebar-page canvas {
+        width: 100% !important;
+        max-width: 100%;
+    }
+}
