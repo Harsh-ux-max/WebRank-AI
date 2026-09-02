@@ -1774,10 +1774,6 @@
                     Number(report.accessibility);
 
 
-                const pwa =
-                    Number(report.pwa);
-
-
                 reportsGrid.innerHTML += `
 
                     <article class="report-card">
@@ -1883,29 +1879,6 @@
                                             accessibility
                                         )
                                             ? accessibility
-                                            : "-"
-                                    }
-
-                                </span>
-
-                            </div>
-
-
-                            <div class="score-box">
-
-                                <div class="score-label">
-
-                                    <span>PWA</span>
-
-                                    <i data-lucide="smartphone"></i>
-
-                                </div>
-
-                                <span class="${getScoreClass(pwa)}">
-
-                                    ${
-                                        Number.isFinite(pwa)
-                                            ? pwa
                                             : "-"
                                     }
 
@@ -2448,9 +2421,6 @@
 
                                 bestPractices:
                                     report.bestPractices,
-
-                                pwa:
-                                    report.pwa,
 
                                 overallScore:
                                     calculateScore(
